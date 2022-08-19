@@ -52,7 +52,7 @@ const uploadImage = async (req, res) => {
         }
 
         if (!isValidString(name)) {
-            return res.status(400).send({ status: false, message: "please enter letters only in name" })
+            return res.status(400).send({ status: false, message: "please enter alphabats only in name" })
         }
 
 
@@ -61,7 +61,7 @@ const uploadImage = async (req, res) => {
             let uploadedFileURL = await aws.uploadFile(files[0])
             requestBody.image = uploadedFileURL
         } else {
-            return res.status(400).send({ status: false, message: "please enter a product Image" })
+            return res.status(400).send({ status: false, message: "please uploade a Image" })
         }
 
         const createData = await imageModel.create(requestBody)

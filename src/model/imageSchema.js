@@ -12,4 +12,6 @@ const imageSchema = new mongoose.Schema({
  
 }, { timestamps: true })
 
+// please send data from 'form-data' in postman
+
 module.exports = new mongoose.model("image", imageSchema)
