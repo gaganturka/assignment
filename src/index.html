@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <table class="table" >
+        <tr class="bg">
+            <th>price</th>
+            <th>size</th>
+            <th>image</th>
+            <th>title</th>
+            <th>description</th>
+        </tr>
+        <tbody id="my table">
+
+        </tbody>
+    </table>
+
+    <script>
+        const api_url = "http://localhost:3000/j"
+
+        async function getapi(url) {
+            const response = await fetch(url)
+            var data = await response.json()
+            var tableData = []
+            tableData = data
+            show(tableData)
+        }
+
+        getapi(api_url)
+
+        function show(tableData){
+            var table = document.getElementById('my table')
+
+            for(var i=0; i<tableData.length; i++){
+                var row = `<tr>
+                    <td>${tableData[i].price}</td>
+                    <td>${tableData[i].size}</td>
+                    <td>${tableData[i].image}</td>
+                    <td>${tableData[i].title}</td>
+                    <td>${tableData[i].description}</td>
+                    </tr>`
+                    table.innerHTML +=row
+
+            }
+        }
+    </script>
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+</body>
+</html> 
