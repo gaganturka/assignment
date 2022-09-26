@@ -1,0 +1,286 @@
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1440px;
+    }
+
+    .container-xl .container {
+        max-width: 1440px;
+        padding: 0px;
+    }
+}
+
+@media screen and (min-device-width: 1200px) and (max-device-width: 1440px) {
+    .container {
+        max-width: 1280px;
+        padding: 0px 40px;
+    }
+
+    .container-xl .container {
+        max-width: 1350px;
+    }
+}
+
+@media screen and (min-device-width: 1200px) and (max-device-width: 1400px) {
+    .main-bn-img img {
+        height: 620px;
+    }
+}
+
+@media screen and (min-device-width: 1400px) and (max-device-width: 1600px) {
+    .main-bn-img img {
+        height: 800px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .main-bn-img img {
+        height: 100%;
+    }
+}
+
+@media screen and (min-device-width: 250px) and (max-device-width: 992px) {
+    body {
+        overflow-x: hidden !important;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .sidebar-wrapper {
+        width: 100%;
+        top: 92px;
+        display: none;
+    }
+
+    .admin-content-wrapper {
+        width: 100%;
+        margin-left: 0;
+        padding: 15px;
+        margin-top: 25px !important;
+    }
+
+    .appointment-tabs .nav-item button {
+        margin-right: 15px;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+    .appointment-tabs ul {
+        justify-content: center;
+    }
+
+    .common-table-wrapper {
+        margin-top: 10px;
+    }
+
+    .app-agenda-box {
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .appointment-details-modal-wrp {
+        display: block;
+    }
+
+    .appointment-details-modal-wrp p {
+        text-align: center;
+    }
+
+    .appointment-details-modal-wrp h3 {
+        margin-bottom: 15px;
+    }
+
+    .app-user-wrp {
+        display: block;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .wallet-recharge-wrp {
+        display: block;
+    }
+
+    .wallet-rec-button {
+        width: 100%;
+        text-align: center;
+        padding-top: 15px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .sidebar-main-logo {
+        display: none;
+    }
+
+    .logut-sidebar-wrp {
+        display: none;
+    }
+
+    .mobile-nav-toggle {
+        display: flex;
+    }
+
+    .admin-nav-header {
+        display: block;
+    }
+
+    .admin-nav-search {
+        max-width: 100%;
+    }
+
+    .admin-notify-bar ul {
+        justify-content: space-between;
+    }
+
+    .admin-notify-bar ul li a {
+        margin-left: 0px;
+    }
+
+    .admin-notify-bar {
+        margin-top: 30px;
+    }
+
+    .admin-user-wrp {
+        justify-content: end;
+        margin-top: 30px;
+    }
+
+    .admin-user-mb-show {
+        display: block;
+    }
+
+    .admin-user-wrp {
+        display: none;
+    }
+
+    .active-status-wrp ul {
+        display: block;
+    }
+
+    .active-status-wrp ul li button {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .active-status-wrp ul li {
+        border-right: unset;
+        width: 100%;
+        text-align: center;
+    }
+
+    .tabs-flex-wrp {
+        display: block;
+    }
+
+    .appointment-tabs ul li {
+        width: 100%;
+    }
+
+    .border-dotted-right {
+        border-right: unset;
+        padding-right: 0px;
+        margin-right: 0px;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 2px dotted #cacaca;
+    }
+
+    .update-per-details-wrp.mb-4 {
+        margin-bottom: 0px !important;
+        padding-bottom: 0px;
+    }
+
+    .update-audio-video {
+        margin-bottom: 50px;
+    }
+
+    .admin-short-nav-buttons .table-btn-group {
+        padding-top: 25px;
+        justify-content: start !important;
+    }
+
+    .admin-short-nav-buttons .table-btn-group button {
+        margin-left: 0px;
+        margin-right: 15px !important;
+    }
+
+    .form-fields-row input.form-control {
+        background: #FBFBFB;
+        font-size: 12px;
+        height: 40px;
+        border: 1px solid #E3E3E3;
+        font-weight: 400;
+        color: #333;
+        margin-top: 15px;
+    }
+
+    .form-fields-row a {
+        padding-top: 15px;
+        display: block;
+    }
+
+    .form-fields-row input.form-control {
+        margin-top: 15px;
+    }
+
+    .form-fields-row select {
+        margin-top: 15px;
+    }
+
+    .form-feilds-container {
+        padding-bottom: 0;
+    }
+
+    .form-fields-row .form-check.form-switch {
+        margin-top: 15px;
+    }
+
+    .table-btn-group {
+        text-align: left;
+    }
+
+    .admin-title-flex .filter-dropdown-admin select {
+        width: 100%;
+    }
+
+    .filter-select-box {
+        margin-bottom: 15px;
+    }
+
+    .filter-buttons-wrp ul {
+        width: 100%;
+        padding-top: 15px;
+    }
+
+    .admin-title-flex {
+        display: block;
+    }
+
+    .admin-title-flex select {
+        margin-bottom: 15px;
+    }
+
+    .archive-ul {
+        margin-left: 0;
+    }
+
+    .invoice-ov-content ul {
+        display: block;
+    }
+
+    .invoice-ov-content ul li {
+        margin-bottom: 15px;
+    }
+
+    .sample-text {
+        left: 5%;
+    }
+
+}
+
+@media only screen and (max-width: 600px) {
+    .auth-modal-artwork {
+        display: none;
+    }
+}
