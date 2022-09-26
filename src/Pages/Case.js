@@ -333,34 +333,6 @@ export const Case = (props) => {
                 setSelectedOfficeType(res.office);
                 setSelectedCaseBillingMethod(res.caseBillingMethod);
 
-<<<<<<< HEAD
-                let contactsData = [];
-                for (let firmCaseContact of res.firmCaseContactIds) {
-                    let contact = firmCaseContact.firmContactId;
-                    contactsData.push(contact._id);
-                }
-                setSelectedClients(contactsData);
-                updateModelFieldValue('clients', contactsData);
-
-                let employeesData = {};
-                for (let firmCaseEmployee of res.firmCaseEmployeeIds) {
-                    let defaultRate = firmCaseEmployee.firmEmployeeId.ratePerHour;
-                    let mode = 'default';
-                    if (defaultRate != firmCaseEmployee.ratePerHour) {
-                        mode = 'case';
-                    }
-                    employeesData[firmCaseEmployee.firmEmployeeId._id] = {
-                        ratePerHour: firmCaseEmployee.ratePerHour,
-                        customRatePerHour: firmCaseEmployee.ratePerHour,
-                        defaultRatePerHour: defaultRate,
-                        mode: mode,
-                    };
-                }
-                setCaseEmployees(employeesData);
-                updateModelFieldValue('employees', employeesData);
-=======
->>>>>>> 1a85be31a544d1616ce595a7324781abcfb3cc17
-
             }).catch(err => {
                 toast('Failed to load');
                 hideLoading();
