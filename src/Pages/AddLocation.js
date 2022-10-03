@@ -22,80 +22,44 @@ import {
 import * as Joi from "joi-browser";
 import Creatable from "react-select/creatable";
 import * as roleActions from "../Services/Actions/RoleActions";
+import * as locationActions from "../Services/Actions/LocationActions";
 
 
-const AddEmployee = () => {
+const AddLocation = () => {
     const navigate = useNavigate()
 
   //State VAriables
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [streetNo, setStreetNo] = useState("");
-  const [area, setArea] = useState("");
   const [value, setValue] = useState("");
   const [modelFields, setModelFields] = useState({
-    firstName: "",
-    lastName: "",
+    address1: "",
+    address2: ""
   });
   const [cities, setCities] = useState([]);
-  const [rolesOptions, setRolesOptions] = useState([]);
-  const [employeeTypeOptions, setEmployeeTypeOptions] = useState([]);
-  const [selectRoles, setSelectedRoles] = useState();
-  const [selectEmployee, setSelectedEmployeeTypes] = useState();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [errors, setErrors] = useState({});
   const [states, setStates] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [employeeRoles, setEmployeeRoles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [model, setModel] = useState(null);
 
-  console.log('COUNTRIES = ', countries);
+  console.log('Model = ', modelFields);
 
   const schema = {
-    firstName: Joi.string().min(3).required(),
-    lastName: Joi.string().min(3).required(),
-    email: Joi.string().email().required()
+    name: Joi.string().min(3).required(),
+    address1: Joi.string().min(3).required(),
+    address2: Joi.string().min(3).required(),
+    country: Joi.string().required(),
+    state: Joi.string().required(),
+    city: Joi.string().required(),
+    zipcode: Joi.string().required(),
   };
 
   useEffect(() => {
     loadCountries();
-    getEmployeeRoles();
-    getEmployeeTypes();
   }, []);
 
-  const getEmployeeRoles = () => {
-    roleActions.getRolesOptions()
-    .then((res) => {
-        setRolesOptions(res);
-    })
-    .catch(err => {
-        toast("Failed to load");
-
-    })
-  }
-
-  const getEmployeeTypes = () => {
-    roleActions.getEmployeeTypes()
-    .then((res) => {
-        setEmployeeTypeOptions(res);
-    })
-    .catch(err => {
-        toast("Failed to load");
-    })
-  }
-
-  const handleRoleChange = (event) => {
-    setSelectedRoles(event);
-    updateModelFieldValue('firmEmployeeRoleId', event);
-  }
-
-  const handleTypeChange = (event) => {
-    setSelectedEmployeeTypes(event);
-    updateModelFieldValue('firmEmployeeTypeId', event);
-  }
-   
   const updateModelFieldValue = (name, value) => {
     modelFields[name] = value;
   };
@@ -171,27 +135,7 @@ const AddEmployee = () => {
       });
   };
 
-//   const updateModelFieldValue = (name, value) => {
-//     switch (name) {
-//         case 'clients':
-//             if (value.length <= 0) {
-//                 value = undefined;
-//             }
-//             break;
-//         case 'employees':
-//             if (Object.keys(value).length <= 0) {
-//                 value = undefined;
-//             }
-//             break;
-//     }
-//     if (value === undefined) {
-//         if (modelFields.hasOwnProperty(name)) {
-//             delete modelFields[name];
-//         }
-//     } else {
-//         modelFields[name] = value;
-//     }
-// }
+
 
   const handleCountryChange = async (event) => {
     console.log('EVENTT == ', event);
@@ -226,6 +170,8 @@ const AddEmployee = () => {
     setValue(value);
   };
 
+
+
   const submit = (event) => {
     event.preventDefault();
     setLoading(true);
@@ -233,25 +179,18 @@ const AddEmployee = () => {
         if (errors == null) {
             console.log('MODAL fIELDS = ', modelFields)
             let updatedModelFields = {
-                area: modelFields.area,
-                streetNo: modelFields.streetNo,
+                name: modelFields.name,
+                address1: modelFields.address1,
+                address2: modelFields.address2,
                 city: modelFields.city,
                 country: modelFields.country,
                 state: modelFields.state,
-                dateOfBirth: modelFields.dateOfBirth,
-                email: modelFields.email,
-                firmEmployeeRoleId: modelFields.firmEmployeeRoleId,
-                firmEmployeeTypeId: modelFields.firmEmployeeTypeId,
-                firstName: modelFields.firstName,
-                lastName: modelFields.lastName,
-                ratePerHour: modelFields.ratePerHour,
-                streetNo: modelFields.streetNo,
                 zipcode: modelFields.zipcode
             }
             // showLoading();
-            employeeActions.create(updatedModelFields)
+            locationActions.create(updatedModelFields)
                 .then((res) => {
-                    toast('Employee has been saved');
+                    toast('Location has been saved');
                     hideLoading();
                     navigate('/manageEmployee');
                 })
@@ -284,7 +223,7 @@ const AddEmployee = () => {
               <div className="col-lg-9">
                 <div className="">
                   <div className="admin-title-flex">
-                    <h3>Add Employee</h3>
+                    <h3>Add Location</h3>
                   </div>
                 </div>
               </div>
@@ -296,11 +235,11 @@ const AddEmployee = () => {
               <div className="basic-info-wrp">
                 <div className="admin-white-box p-0">
                   <div className="basic-info-header">
-                    <h5>Add new Employee</h5>
+                    <h5>Add new Location</h5>
                   </div>
 
                   <div className="form-feilds-container">
-                    <div className="form-fields-row">
+                  <div className="form-fields-row">
                       <div className="row">
                         <div className="col-lg-3">
                           <h3>Name</h3>
@@ -310,128 +249,57 @@ const AddEmployee = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="First name"
-                              name="firstName"
-                              value={modelFields.firstName || ""}
+                              id="name"
+                              name="name"
+                              value={modelFields.name || ""}
                               onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="col-lg-3">
-                          <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Last name"
-                              name="lastName"
-                              value={modelFields.lastName || ""}
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-fields-row">
-                      <div className="row">
-                        <div className="col-lg-3">
-                          <h3>Email</h3>
-                        </div>
-                        <div className="col-lg-3">
-                          <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter email"
-                              name="email"
-                              value={modelFields.email || ""}
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div className="form-fields-row">
-                      <div className="row">
-                        <div className="col-lg-3">
-                          <h3>Rate Per Hour</h3>
-                        </div>
-                        <div className="col-lg-3">
-                          <div className="form-group">
-                            <input
-                              type="number"
-                              className="form-control"
-                              placeholder="Rate Per Hour"
-                              name="ratePerHour"
-                              value={modelFields.ratePerHour || ""}
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div className="form-fields-row">
-                      <div className="row">
-                        <div className="col-lg-3">
-                          <h3>Birth Date</h3>
-                        </div>
-                        <div className="col-lg-4">
-                          <div className="form-group">
-                            <input
-                              type="date"
-                              className="form-control"
-                              id="dateOfBirth"
-                              name="dateOfBirth"
-                              value={
-                                formatToInputTypeDate(
-                                  modelFields.dateOfBirth
-                                ) || ""
-                              }
-                              onChange={handleChange}
-                              placeholder="Date of Birth"
-                            />
-                            <FieldError error={errors.dateOfBirth} />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-fields-row">
-                      <div className="row">
-                        <div className="col-lg-3">
-                          <h3>Address</h3>
-                        </div>
-                        <div className="col-lg-3">
-                          <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="streetNo"
-                              name="streetNo"
-                              value={modelFields.streetNo || ""}
-                              onChange={handleChange}
-                              placeholder="Street No, Block No."
+                              placeholder="Name"
                             />
                             <FieldError error={errors.streetNo} />
                           </div>
                         </div>
+                      </div>
+                    </div>
+
+                    <div className="form-fields-row">
+                      <div className="row">
+                        <div className="col-lg-3">
+                          <h3>Address 1</h3>
+                        </div>
                         <div className="col-lg-3">
                           <div className="form-group">
                             <input
                               type="text"
                               className="form-control"
-                              id="area"
-                              name="area"
-                              value={modelFields.area || ""}
+                              id="address1"
+                              name="address1"
+                              value={modelFields.address1 || ""}
                               onChange={handleChange}
-                              placeholder="Area"
+                              placeholder="Address1"
                             />
-                            <FieldError error={errors.area} />
+                            <FieldError error={errors.streetNo} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-fields-row">
+                      <div className="row">
+                        <div className="col-lg-3">
+                          <h3>Address 2</h3>
+                        </div>
+                        <div className="col-lg-3">
+                          <div className="form-group">
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="address2"
+                              name="address2"
+                              value={modelFields.address2 || ""}
+                              onChange={handleChange}
+                              placeholder="Address2"
+                            />
+                            <FieldError error={errors.streetNo} />
                           </div>
                         </div>
                       </div>
@@ -464,33 +332,6 @@ const AddEmployee = () => {
                           <h3>State , city </h3>
                         </div>
 
-                        {/* <div className="col-lg-2">
-                          <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Zip code"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-lg-2">
-                          <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="State"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-lg-2">
-                          <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="City"
-                            />
-                          </div>
-                        </div> */}
                         <div className="col-lg-2">
                           <div className="form-group">
                             <div className="react-select">
@@ -535,60 +376,12 @@ const AddEmployee = () => {
                     </div>
                   </div>
 
-                  <div className="basic-info-header">
-                    <h5>Employee Role</h5>
-                  </div>
-
-                  <div className="form-fields-row">
-                    <div className="row">
-                      <div className="col-lg-3">
-                        <h3>Employee role</h3>
-                      </div>
-                      <div className="col-lg-3">
-                        <div className="form-group">
-                          <CustomSelect
-                            isMulti={false}
-                            placeholder="Select Role"
-                            isClearable={true}
-                            onChange={handleRoleChange}
-                            value={selectRoles}
-                            options={rolesOptions}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="basic-info-header">
-                    <h5>Employee Type</h5>
-                  </div>
-
-                  <div className="form-fields-row">
-                    <div className="row">
-                      <div className="col-lg-3">
-                        <h3>Employee type</h3>
-                      </div>
-                      <div className="col-lg-3">
-                        <div className="form-group">
-                        <CustomSelect
-                            isMulti={false}
-                            placeholder="Select Type"
-                            isClearable={true}
-                            onChange={handleTypeChange}
-                            value={selectEmployee}
-                            options={employeeTypeOptions}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="form-fields-row mb-5">
                     <div className="row">
                       <div className="col-lg-3"></div>
                       <div className="col-lg-3">
                         <button className="btn btn-grey-common" type="submit" onClick={submit}>
-                          Add Employee
+                          Add Location
                         </button>
                       </div>
                     </div>
@@ -603,4 +396,4 @@ const AddEmployee = () => {
   );
 };
 
-export default AddEmployee;
+export default AddLocation;

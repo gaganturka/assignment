@@ -22,4 +22,4 @@ const update = (id, values) => {
     return http.patch('/firm/employees/' + id, values)
 }
 
-export default {get, view, create, update};
+export default {get, view, create, update, getAll};

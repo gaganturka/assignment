@@ -78,6 +78,7 @@ const AddRole = () => {
   };
 
   const handleSelectedOptions = (event) => {
+    console.log('EVENT = ', event)
     setSelectedOption(event);
   };
 
