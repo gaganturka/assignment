@@ -17,6 +17,7 @@ import AddRole from "../Pages/AddRole";
 import ManageSalaries from "../Pages/ManageSalaries";
 import ManageSubscriptions from "../Pages/ManageSubscriptions";
 import {CaseStages} from '../Pages/CaseStages';
+import {EditEmployee} from '../Pages/EditEmployee'
 import Settings from "../Pages/Settings";
 import PageNotFound from "../Pages/PageNotFound";
 import {Routes} from "react-router-dom";
@@ -24,10 +25,12 @@ import {PracticeAreas} from "../Pages/PracticeAreas";
 import {Companies} from "../Pages/Companies";
 import {Client} from "../Pages/Client";
 import {Clients} from "../Pages/Clients";
+import {ManageLocation} from "../Pages/ManageLocation"
 import {ContactGroups} from "../Pages/ContactGroups";
 import {CaseDetails} from "../Pages/CaseDetails";
 import {TimeAndExpensesEntries} from "../Pages/TimeAndExpensesEntries";
 import {ActivityTypes} from "../Pages/ActivityTypes";
+import AddLocation from '../Pages/AddLocation';
 
 const afterLoginRoutes = (
     <Routes>
@@ -36,6 +39,20 @@ const afterLoginRoutes = (
             path="/"
             key="clients"
             element={<Clients/>}
+        />
+
+        <Route
+            exact
+            path="/addLocation"
+            key="AddLocation"
+            element={<AddLocation/>}
+        />
+
+        <Route
+            exact
+            path="/manageLocation"
+            key="manageLocation"
+            element={<ManageLocation/>}
         />
 
         <Route
@@ -166,6 +183,12 @@ const afterLoginRoutes = (
             path="/addEmployee"
             key="addEmployee"
             element={<AddEmployee/>}
+        />
+        <Route
+            exact
+            path="/editEmployee/:employeeId"
+            key="editEmployee"
+            element={<EditEmployee/>}
         />
         <Route
             exact
