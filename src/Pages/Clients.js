@@ -1,13 +1,13 @@
 import ReactPaginate from "react-paginate";
-import React, {useEffect, useMemo, useState} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import * as contactActions from '../Services/Actions/ContactActions';
-import {concatStrings, formatDate, handleRequestError, hideLoading, openModal, showLoading} from "../Utils/Helpers";
-import {toast} from "react-toastify";
+import { concatStrings, formatDate, handleRequestError, hideLoading, openModal, showLoading } from "../Utils/Helpers";
+import { toast } from "react-toastify";
 import * as commonActions from "../Services/Actions/CommonActions";
 import * as contactGroupActions from "../Services/Actions/ContactGroupActions";
 import Select from "react-select";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Clients = (props) => {
 
@@ -175,7 +175,7 @@ export const Clients = (props) => {
                                         placeholder="Search"
                                         onChange={searchData}
                                     />
-                                    <img src="/assets/img/search-icon.png" alt=""/>
+                                    <img src="/assets/img/search-icon.png" alt="" />
                                 </div>
                             </div>
                         </div>
@@ -190,80 +190,81 @@ export const Clients = (props) => {
                                             <div className="table-responsive">
                                                 <table className="table">
                                                     <thead>
-                                                    <tr>
-                                                        <th>Full Name</th>
-                                                        <th>Email</th>
-                                                        <th>Group</th>
-                                                        <th>Type</th>
-                                                        <th>Company</th>
-                                                        <th>Updated On</th>
-                                                        <th>Actions</th>
-                                                    </tr>
+                                                        <tr>
+                                                            <th>Full Name</th>
+                                                            <th>Email</th>
+                                                            <th>Group</th>
+                                                            <th>Type</th>
+                                                            <th>Company</th>
+                                                            <th>Updated On</th>
+                                                            <th>Actions</th>
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {paginationData?.docs.map((model, i) => {
-                                                        return (
-                                                            <tr key={i}>
-                                                                <td>
-                                                                    <h5>{concatStrings(' ', model.firstName, model.middleName, model.lastName)}</h5>
-                                                                </td>
-                                                                <td>{model?.email}</td>
-                                                                <td>{model?.firmContactGroupId?.name}</td>
-                                                                <td>{model?.contactType}</td>
-                                                                <td>{model?.firmCompanyId?.name}</td>
-                                                                <td>{formatDate(model.createdAt)}</td>
-                                                                <td>
-                                                                    <div className="action-btn-group">
-                                                                        <Link to={`/clients/${model._id}/edit`}>
-                                                                            <button className="btn" type="button">
-                                                                                <img
-                                                                                    src="/assets/img/edit-pencil-icon.png"
-                                                                                    alt=""
-                                                                                />{" "}
-                                                                            </button>
-                                                                        </Link>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        );
-                                                    })}
-                                                        </tbody>
-                                                        </table>
-                                                        </div>
-                                                        </div>
-                                                    {paginationData.docs.length > 0 ?
-                                                        <div className="react-paginate-wrapper"><ReactPaginate
-                                                        previousLabel={"Previous"}
-                                                        nextLabel={"Next"}
-                                                        breakLabel={"..."}
-                                                        pageCount={paginationData?.totalPages}
-                                                        marginPagesDisplayed={1}
-                                                        pageRangeDisplayed={3}
-                                                        onPageChange={handlePageClick}
-                                                        containerClassName={
-                                                        "pagination justify-content-center"
-                                                    }
-                                                        forcePage={paginationData?.page - 1}
-                                                        pageClassName={"page-item"}
-                                                        pageLinkClassName={"page-link"}
-                                                        previousClassName={"page-item"}
-                                                        previousLinkClassName={"page-link"}
-                                                        nextClassName={"page-item"}
-                                                        nextLinkClassName={"page-link"}
-                                                        breakClassName={"page-item"}
-                                                        breakLinkClassName={"page-link"}
-                                                        activeClassName={"active"}
-                                                        /></div>
-                                                        : <div className="text-center">No Data</div>}
-                                                        </div>
-                                                        </div>
-                                                        </div>
-                                                        </div>
-                                                        </div>
-                                                        </div>
-                                                        </section>
-                                                        </>
+                                                        {paginationData?.docs.map((model, i) => {
+                                                            return (
+                                                                <tr key={i}>
+                                                                    <td>
+                                                                        <h5>{concatStrings(' ', model.firstName, model.middleName, model.lastName)}</h5>
+                                                                    </td>
+                                                                    <td>{model?.email}</td>
+                                                                    <td>{model?.firmContactGroupId?.name}</td>
+                                                                    <td>{model?.contactType}</td>
+                                                                    <td>{model?.firmCompanyId?.name}</td>
+                                                                    <td>{formatDate(model.createdAt)}</td>
+                                                                    <td>
+                                                                        <div className="action-btn-group">
+                                                                            <Link to={`/clients/${model._id}/edit`}>
+                                                                                <button className="btn" type="button">
+                                                                                    <img
+                                                                                        src="/assets/img/edit-pencil-icon.png"
+                                                                                        alt=""
+                                                                                    />{" "}
+                                                                                </button>
+                                                                            </Link>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        {paginationData.docs.length > 0 ?
+                                            <div className="react-paginate-wrapper">
+                                                <ReactPaginate
+                                                previousLabel={"Previous"}
+                                                nextLabel={"Next"}
+                                                breakLabel={"..."}
+                                                pageCount={paginationData?.totalPages}
+                                                marginPagesDisplayed={1}
+                                                pageRangeDisplayed={3}
+                                                onPageChange={handlePageClick}
+                                                containerClassName={
+                                                    "pagination justify-content-center"
+                                                }
+                                                forcePage={paginationData?.page - 1}
+                                                pageClassName={"page-item"}
+                                                pageLinkClassName={"page-link"}
+                                                previousClassName={"page-item"}
+                                                previousLinkClassName={"page-link"}
+                                                nextClassName={"page-item"}
+                                                nextLinkClassName={"page-link"}
+                                                breakClassName={"page-item"}
+                                                breakLinkClassName={"page-link"}
+                                                activeClassName={"active"}
+                                            /></div>
+                                            : <div className="text-center">No Data</div>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </>
 
-                                                        )
+    )
 
-                                                    }
+}

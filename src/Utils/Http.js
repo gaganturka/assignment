@@ -36,6 +36,7 @@ export const post = (path, data) => {
                 if (response.statusCode.toString() === '200') {
                     return resolve(response.data);
                 } else {
+                    console.log('error in res', response);
                     return reject(response);
                 }
             })

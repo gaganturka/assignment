@@ -103,10 +103,18 @@ const afterLoginRoutes = (
 
         <Route
             exact
-            path="/time-expenses/times/create/"
+            path="/time-expenses/:modelId/edit"
             key="createTimeEntry"
             element={<TimeEntry/>}
         />
+
+             <Route
+            exact
+            path="/time-expenses/times/create"
+            key="createTimeEntry"
+            element={<TimeEntry/>}
+        />
+       
 
         <Route
             exact

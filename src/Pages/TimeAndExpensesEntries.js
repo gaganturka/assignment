@@ -1,16 +1,100 @@
-import {React, useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import { React, useEffect, useContext, useState } from "react";
+import { Link, useNavigate, useSearchParams ,Outlet } from "react-router-dom";
+import * as timeExpenseActions from "../Services/Actions/TimeExpenseActions";
+import { AuthContext } from "../Context/AuthContext"
+import ReactPaginate from "react-paginate";
+
 
 
 export const TimeAndExpensesEntries = () => {
 
+
+    const { updateEntry, setUpdateEntery } = useContext(AuthContext)
+    let [allEnteries, setAllEnteries] = useState([])
+    const [description, setDescription] = useState('')
+    const [startingDate, setStartingDate] = useState('')
+    const [endDate, setendDate] = useState('')
+    const [re, setRe] = useState('')
+
+    const [paginationData, setPaginationData] = useState({
+        docs: [],
+        hasNextPage: false,
+        hasPrevPage: false,
+        limit: 0,
+        offset: 0,
+        page: 0,
+        pagingCounter: 0,
+        totalDocs: 0,
+        totalPages: 0,
+    });
+
+
+    const navigate = useNavigate()
+    useEffect(() => {
+        fetchData();
+
+        // async function fetchData() {
+        //     let data = await timeExpenseActions.viewAllEntries({description, startingDate, endDate})
+        //     setAllEnteries(data)
+        // }
+        // fetchData();
+    }, [re]); // Or [] if effect doesn't need props or state
+
+    const fetchData = async (pageNumber = 1) => {
+        let data = await timeExpenseActions.viewAllEntries({ description, startingDate, endDate, page: pageNumber, })
+        // setAllEnteries(data)
+        setPaginationData(data)
+    }
+
+    
+
+    const update = ((value) => {
+        console.log('valueeeeeeeeee', value);
+        setUpdateEntery(value)
+        navigate(`${value._id}/edit`)
+    })
+
+    const descriptionUpdate = (e) => {
+        setDescription(e.target.value)
+    }
+
+    const handelStartingDate = (e) => {
+        setStartingDate(e.target.value)
+    }
+
+    const handelEndDate = (e) => {
+        setendDate(e.target.value)
+    }
+    const handelFilter = () => {
+        fetchData();
+        
+    }
+
+    const handelClear = (e) => {
+        setDescription('')
+        setStartingDate('')
+        setendDate('')
+        setRe('true')
+
+    }
+
+    const handlePageClick = (data) => {
+        console.log(data);
+        let current = data.selected + 1;
+        fetchData(current);
+    };
+
+
+    console.log('filter', description, startingDate, endDate);
+
+    console.log('all', allEnteries)
     return (
         <>
+            {
+                console.log('value in return', description, startingDate, endDate)
+            }
             <section className="admin-wrapper">
-
-
                 <div className="admin-content-wrapper">
-
 
                     <div className="admin-title-header mt-0">
                         <div className="row">
@@ -30,14 +114,14 @@ export const TimeAndExpensesEntries = () => {
                             <div className="col-lg-3">
                                 <div className="admin-short-nav-buttons">
                                     <div className="table-btn-group">
-                                        <Link to={`/time-expenses/times/create/`}>
+                                        <Link to={`/time-expenses/times/create`}>
                                             <button
                                                 className="btn black-fill"
                                                 type="button">
                                                 Add Time
                                             </button>
                                         </Link>
-                                        <Link to={`/time-expenses/expenses/create/`}>
+                                        <Link to={`/time-expenses/expenses/create`}>
                                             <button
                                                 className="btn black-fill"
                                                 type="button">
@@ -53,31 +137,24 @@ export const TimeAndExpensesEntries = () => {
                     <div className="admin-filter-navbar bg-grey">
                         <div className="row align-items-center">
                             <div className="col-lg">
-                                <div className="filter-select-box">
-                                    <select className="form-select">
-                                        <option selected="">Filter Time entry by case</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
+
                             </div>
                             <div className="col-lg">
-                                <div className="filter-input-box">
-                                    <input type="text" className="form-control" placeholder="Search by team"/>
-                                    <img src="/assets/img/search-icon.png" alt=""/>
+                                <div className="filter-input-box" >
+                                    <input type="text" className="form-control" placeholder="Search by team" value={description} onChange={descriptionUpdate} />
+                                    <img src="/assets/img/search-icon.png" alt="" />
                                 </div>
                             </div>
                             <div className="col-lg">
                                 <div className="filter-input-box d-flex align-items-center">
                                     <label className="me-2" htmlFor="">Date range</label>
-                                    <input type="date" className="form-control" placeholder="DD -MM -YYYY"/>
+                                    <input type="date" className="form-control" value={startingDate} onChange={handelStartingDate} placeholder="DD -MM -YYYY" />
                                 </div>
                             </div>
                             <div className="col-lg">
                                 <div className="filter-input-box d-flex align-items-center">
                                     <label className="me-2" htmlFor="">To</label>
-                                    <input type="date" className="form-control" placeholder="DD -MM -YYYY"/>
+                                    <input type="date" className="form-control" value={endDate} onChange={handelEndDate} placeholder="DD -MM -YYYY" />
                                 </div>
                             </div>
 
@@ -85,10 +162,10 @@ export const TimeAndExpensesEntries = () => {
                                 <div className="filter-buttons-wrp">
                                     <ul>
                                         <li className="">
-                                            <button className="btn" type="button">Apply Filter</button>
+                                            <button className="btn" type="button" onClick={handelFilter} >Apply Filter</button>
                                         </li>
                                         <li className="">
-                                            <button className="btn" type="button">Clear Filter</button>
+                                            <button className="btn" onClick={handelClear} type="button">Clear Filter</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -107,241 +184,88 @@ export const TimeAndExpensesEntries = () => {
                                             <div className="table-responsive">
                                                 <table className="table">
                                                     <thead>
-                                                    <tr>
-                                                        <th>Case</th>
-                                                        <th>Number</th>
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Activity</th>
 
-                                                        <th>Firm member</th>
+                                                            <th>Duration</th>
 
-                                                        <th>Next task</th>
-                                                        <th>Status Update</th>
-                                                        <th>Added</th>
+                                                            <th>Description</th>
+                                                            <th>Rate</th>
+                                                            <th>Total</th>
 
-                                                        <th>&nbsp;</th>
-                                                    </tr>
+                                                            <th>&nbsp;</th>
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <h6>Health legal case</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>7979-78600</h6>
-                                                        </td>
+                                                        {paginationData?.docs.map(item =>
+                                                            <tr>
+                                                                <td>
+                                                                    <h6>{item.date}</h6>
+                                                                </td>
+                                                                <td>
+                                                                    <h6>{item.firmActivityTypeId}</h6>
+                                                                </td>
 
-                                                        <td>
-                                                            <h6>Vaibhav Jagtap </h6>
-                                                            <p>( Lead Attorney )</p>
-                                                        </td>
+                                                                <td>
+                                                                    <h6>{item.duration} </h6>
+                                                                </td>
 
-                                                        <td>
-                                                            <h6>Prepare docs for Meeting <br/>
-                                                                <span className="red-badge">Due</span> 03 Aug Task Is
-                                                                Overdue
-                                                            </h6>
-                                                            <a href={undefined}>View all task</a>
-                                                        </td>
-                                                        <td>
-                                                            <h6 className="word-break">Created Today, 1 : 24 Pm
-                                                                by <small> My case system</small></h6>
-                                                            <h6 className="word-break">Sent the engagement
-                                                                letter and Preparing for
-                                                                the Discovery Perp Meeting
-                                                                and the Pleading now in
-                                                                Advance of the pending
-                                                                deadline</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>Today by <br/>
-                                                                <small> My case System</small></h6>
-                                                        </td>
+                                                                <td>
+                                                                    <h6>{item.description}
+                                                                    </h6>
+                                                                </td>
+                                                                <td>
+                                                                    {item.rate}
 
-                                                        <td>
-                                                            <div className="action-btn-group">
-                                                                <a href="add-time-entry.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Time
-                                                                    </button>
-                                                                </a>
-                                                                <a href="add-expenses.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Expense
-                                                                    </button>
-                                                                </a>
-                                                                <button className="btn black-fill" type="button"><img
-                                                                    src="/assets/img/eye-icon-black.png" alt=""/>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                                </td>
+                                                                <td>
+                                                                    <h6>{item.amount}</h6>
+                                                                </td>
 
-                                                    <tr>
-                                                        <td>
-                                                            <h6>Health legal case</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>7979-78600</h6>
-                                                        </td>
-
-                                                        <td>
-                                                            <h6>Vaibhav Jagtap </h6>
-                                                            <p>( Lead Attorney )</p>
-                                                        </td>
-
-                                                        <td>
-                                                            <h6>Prepare docs for Meeting <br/>
-                                                                <span className="red-badge">Due</span> 03 Aug Task Is
-                                                                Overdue
-                                                            </h6>
-                                                            <a href={undefined}>View all task</a>
-                                                        </td>
-                                                        <td>
-                                                            <h6 className="word-break">Created Today, 1 : 24 Pm
-                                                                by <small> My case system</small></h6>
-                                                            <h6 className="word-break">Sent the engagement
-                                                                letter and Preparing for
-                                                                the Discovery Perp Meeting
-                                                                and the Pleading now in
-                                                                Advance of the pending
-                                                                deadline</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>Today by <br/>
-                                                                <small> My case System</small></h6>
-                                                        </td>
-
-                                                        <td>
-                                                            <div className="action-btn-group">
-                                                                <a href="add-time-entry.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Time
-                                                                    </button>
-                                                                </a>
-                                                                <a href="add-expenses.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Expense
-                                                                    </button>
-                                                                </a>
-                                                                <button className="btn black-fill" type="button"><img
-                                                                    src="/assets/img/eye-icon-black.png" alt=""/>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <h6>Health legal case</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>7979-78600</h6>
-                                                        </td>
-
-                                                        <td>
-                                                            <h6>Vaibhav Jagtap </h6>
-                                                            <p>( Lead Attorney )</p>
-                                                        </td>
-
-                                                        <td>
-                                                            <h6>Prepare docs for Meeting <br/>
-                                                                <span className="red-badge">Due</span> 03 Aug Task Is
-                                                                Overdue
-                                                            </h6>
-                                                            <a href={undefined}>View all task</a>
-                                                        </td>
-                                                        <td>
-                                                            <h6 className="word-break">Created Today, 1 : 24 Pm
-                                                                by <small> My case system</small></h6>
-                                                            <h6 className="word-break">Sent the engagement
-                                                                letter and Preparing for
-                                                                the Discovery Perp Meeting
-                                                                and the Pleading now in
-                                                                Advance of the pending
-                                                                deadline</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>Today by <br/>
-                                                                <small> My case System</small></h6>
-                                                        </td>
-
-                                                        <td>
-                                                            <div className="action-btn-group">
-                                                                <a href="add-time-entry.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Time
-                                                                    </button>
-                                                                </a>
-                                                                <a href="add-expenses.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Expense
-                                                                    </button>
-                                                                </a>
-                                                                <button className="btn black-fill" type="button"><img
-                                                                    src="/assets/img/eye-icon-black.png" alt=""/>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <h6>Health legal case</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>7979-78600</h6>
-                                                        </td>
-
-                                                        <td>
-                                                            <h6>Vaibhav Jagtap </h6>
-                                                            <p>( Lead Attorney )</p>
-                                                        </td>
-
-                                                        <td>
-                                                            <h6>Prepare docs for Meeting <br/>
-                                                                <span className="red-badge">Due</span> 03 Aug Task Is
-                                                                Overdue
-                                                            </h6>
-                                                            <a href={undefined}>View all task</a>
-                                                        </td>
-                                                        <td>
-                                                            <h6 className="word-break">Created Today, 1 : 24 Pm
-                                                                by <small> My case system</small></h6>
-                                                            <h6 className="word-break">Sent the engagement
-                                                                letter and Preparing for
-                                                                the Discovery Perp Meeting
-                                                                and the Pleading now in
-                                                                Advance of the pending
-                                                                deadline</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>Today by <br/>
-                                                                <small> My case System</small></h6>
-                                                        </td>
-
-                                                        <td>
-                                                            <div className="action-btn-group">
-                                                                <a href="add-time-entry.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Time
-                                                                    </button>
-                                                                </a>
-                                                                <a href="add-expenses.html">
-                                                                    <button className="btn black-fill" type="button">Add
-                                                                        Expense
-                                                                    </button>
-                                                                </a>
-                                                                <button className="btn black-fill" type="button"><img
-                                                                    src="/assets/img/eye-icon-black.png" alt=""/>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
+                                                                <td>
+                                                                    <div className="action-btn-group">
+                                                                        {/* <a href="add-time-entry.html"> */}
+                                                                        <button onClick={() => update(item)} className="btn black-fill" type="button">Edit
+                                                                        </button>
+                                                                        {/* </a> */}
+                                                                        {/* <button className="btn black-fill" type="button"><img
+                                                                            src="/assets/img/eye-icon-black.png" alt="" />
+                                                                        </button> */}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
 
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
+                                        {paginationData.docs.length > 0 ?
+                                            <div className="react-paginate-wrapper"><ReactPaginate
+                                                previousLabel={"Previous"}
+                                                nextLabel={"Next"}
+                                                breakLabel={"..."}
+                                                pageCount={paginationData?.totalPages}
+                                                marginPagesDisplayed={1}
+                                                pageRangeDisplayed={3}
+                                                onPageChange={handlePageClick}
+                                                containerClassName={
+                                                    "pagination justify-content-center"
+                                                }
+                                                forcePage={paginationData?.page - 1}
+                                                pageClassName={"page-item"}
+                                                pageLinkClassName={"page-link"}
+                                                previousClassName={"page-item"}
+                                                previousLinkClassName={"page-link"}
+                                                nextClassName={"page-item"}
+                                                nextLinkClassName={"page-link"}
+                                                breakClassName={"page-item"}
+                                                breakLinkClassName={"page-link"}
+                                                activeClassName={"active"}
+                                            /></div>
+                                            : <div className="text-center">No Data</div>}
+
                                     </div>
                                 </div>
                             </div>

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, { useEffect, useMemo, useContext, useState } from "react";
 
 import {
     closeModal, formatDate,
@@ -10,30 +10,39 @@ import {
     validateJOIProperty
 } from "../Utils/Helpers";
 
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 import * as commonActions from "../Services/Actions/CommonActions";
 import * as activityTypesActions from "../Services/Actions/ActivityTypesActions";
 import * as caseActions from "../Services/Actions/CaseActions";
 import * as timeExpenseActions from "../Services/Actions/TimeExpenseActions";
+import { AuthContext } from "../Context/AuthContext"
 
 import Select from "react-select";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import * as Joi from "joi-browser";
 
 import * as contactActions from "../Services/Actions/ContactActions";
 import * as companyActions from "../Services/Actions/CompanyActions";
 import FieldError from "../Componenets/FieldError";
-import {ContactGroupFormModal} from "../Componenets/ContactGroupFormModal";
-import {CompanyFormModal} from "../Componenets/CompanyFormModal";
+import { ContactGroupFormModal } from "../Componenets/ContactGroupFormModal";
+import { CompanyFormModal } from "../Componenets/CompanyFormModal";
 import Creatable from "react-select/creatable";
 import ActivityTypeFormModal from "../Componenets/ActivityTypeFormModal";
-import {CustomSelect} from "../Componenets/CustomSelect";
+import { CustomSelect } from "../Componenets/CustomSelect";
+import { object } from "joi";
 
 export const TimeEntry = (props) => {
-    const navigate = useNavigate();
 
-    const {modelId} = useParams();
+    const navigate = useNavigate();
+    const { updateEntry, setUpdateEntery } = useContext(AuthContext)
+// if(updateEntry.date.length > 0){
+    // updateEntry?date ? updateEntry.date.split('T')[0] : ""
+// }
+
+    const { modelId } = useParams();
+    console.log('asdadsadsdas',modelId);
+
 
     const [cases, setCases] = useState([]);
     const [selectedCase, setSelectedCase] = useState(null);
@@ -43,19 +52,41 @@ export const TimeEntry = (props) => {
 
     const [activityTypes, setActivityTypes] = useState([]);
     const [selectedActivityType, setSelectedActivityType] = useState(null);
+    const [change, setChange] = useState('')
 
     const [modelFields, setModelFields] = useState({
-        firmCaseId: "",
-        firmCaseEmployeeId: "",
-        firmActivityTypeId: "",
-        isBillable: "",
-        description: "",
-        date: "",
-        rate: "",
-        duration: "",
-        amount: "",
-        rateType: "",
+        firmCaseId: updateEntry.firmCaseId ? updateEntry.firmCaseId : "",
+        firmCaseEmployeeId: updateEntry.firmCaseEmployeeId ? updateEntry.firmCaseEmployeeId : "",
+        firmActivityTypeId: updateEntry.firmActivityTypeId ? updateEntry.firmActivityTypeId : "",
+        isBillable: updateEntry.isBillable ? updateEntry.isBillable : "",
+        description: updateEntry.description ? updateEntry.description : "",
+        date: updateEntry.date ? updateEntry.date.split('T')[0] : "",
+        rate: updateEntry.rate ? updateEntry.rate : "",
+        duration: updateEntry.duration ? updateEntry.duration : "",
+        rateType: updateEntry.rateType ? updateEntry.rateType : "",
     });
+    if (Object.keys(updateEntry) > 0) {
+        modelFields.firmCaseId = updateEntry.firmCaseId
+        modelFields.firmCaseEmployeeId = updateEntry.firmCaseEmployeeId
+        modelFields.firmActivityTypeId = updateEntry.firmActivityTypeId
+        modelFields.isBillable = updateEntry.isBillable
+        modelFields.description = updateEntry.description
+        // modelFields.date = updateEntry.date
+        modelFields.rate = updateEntry.rate
+        modelFields.duration = updateEntry.duration
+        modelFields.rateType = updateEntry.rateType
+        setChange('true')
+
+    } else {
+        console.log('')
+
+    }
+    useEffect(() => {
+        console.log('not happen');
+    }, [change])
+
+
+
 
     const [errors, setErrors] = useState({});
 
@@ -65,7 +96,6 @@ export const TimeEntry = (props) => {
         isBillable: Joi.required(),
         description: Joi.required(),
         rate: Joi.required(),
-        amount: Joi.required(),
         rateType: Joi.required(),
     };
 
@@ -74,8 +104,8 @@ export const TimeEntry = (props) => {
     }
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
-        let errorData = {...errors};
+        const { name, value } = event.target;
+        let errorData = { ...errors };
         const errorMessage = validateJOIProperty(schema, event);
         if (errorMessage) {
             errorData[name] = errorMessage;
@@ -86,17 +116,23 @@ export const TimeEntry = (props) => {
         setErrors(errorData);
     };
 
-    const submit = (event) => {
+    const submit = async (event) => {
         event.preventDefault();
-        console.log(modelFields);
+        //    let res = await timeExpenseActions.createTimeEntry(modelFields)
+        // console.log('res');
+        //    if(res.statusCode == 200){
+
+        //     navigate('/time-expenses');
+        // }
         let errors = validateJOIFormField(modelFields, schema);
+        console.log('errror', errors);
         if (errors == null) {
             showLoading();
             let request = null;
             if (modelId === undefined) {
-                request = contactActions.create(modelFields);
+                request = timeExpenseActions.createTimeEntry(modelFields);
             } else {
-                request = contactActions.update(modelId, modelFields);
+                request = timeExpenseActions.updateEntry(modelId, modelFields);
             }
             request.then((res) => {
                 toast('Time Entry has been saved');
@@ -141,15 +177,18 @@ export const TimeEntry = (props) => {
     useEffect(() => {
         if (modelId !== undefined) {
             showLoading();
-            contactActions.view(modelId).then(res => {
+            timeExpenseActions.getEntry(modelId).then(res => {
                 hideLoading();
                 setModelFields(res);
+                loadCaseEmployees();
             }).catch(err => {
                 toast('Failed to load');
                 hideLoading();
                 navigate('/clients');
             });
-        }
+        } //else{
+            //setModelFields('')
+       // }
     }, [modelId]);
 
     const loadCases = () => {
@@ -174,11 +213,11 @@ export const TimeEntry = (props) => {
             hideLoading();
             let employeesData = [];
             console.log(res);
-            for (let employeeModel of res.data) {
+            for (let employeeModel of res) {
                 console.log(employeeModel);
                 employeesData.push({
                     value: employeeModel._id,
-                    label: employeeModel.name
+                    label: employeeModel._id
                 });
             }
             setUsers(employeesData);
@@ -214,8 +253,10 @@ export const TimeEntry = (props) => {
     }
 
     const handleCaseEmployeeChange = async (event) => {
-        setSelectedUser(event);
         updateModelFieldValue('firmCaseEmployeeId', event);
+        setSelectedUser(event);
+
+
     }
 
     const handleActivityTypeChange = async (event) => {
@@ -235,7 +276,7 @@ export const TimeEntry = (props) => {
 
     return (
         <>
-            <ActivityTypeFormModal onClose={activityTypeModalClosed}/>
+            <ActivityTypeFormModal onClose={activityTypeModalClosed} />
             <section className="admin-wrapper">
                 <div className="admin-content-wrapper">
                     <div className="admin-title-header mt-0">
@@ -278,12 +319,12 @@ export const TimeEntry = (props) => {
                                                     <div className="form-group">
                                                         <div className="react-select">
                                                             <CustomSelect onChange={handleCaseChangeChange}
-                                                                          placeholder="Select Case"
-                                                                          value={selectedCase}
-                                                                          isClearable={true}
-                                                                          options={cases}/>
+                                                                placeholder="Select Case"
+                                                                value={selectedCase}
+                                                                isClearable={true}
+                                                                options={cases} />
                                                         </div>
-                                                        <FieldError error={errors.firmCaseId}/>
+                                                        <FieldError error={errors.firmCaseId} />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-2">
@@ -301,12 +342,12 @@ export const TimeEntry = (props) => {
                                                     <div className="form-group">
                                                         <div className="react-select">
                                                             <CustomSelect onChange={handleCaseEmployeeChange}
-                                                                          placeholder="Select User"
-                                                                          value={selectedUser}
-                                                                          isClearable={true}
-                                                                          options={users}/>
+                                                                placeholder="Select User"
+                                                                value={selectedUser}
+                                                                isClearable={true}
+                                                                options={users} />
                                                         </div>
-                                                        <FieldError error={errors.firmCaseEmployeeId}/>
+                                                        <FieldError error={errors.firmCaseEmployeeId} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -320,24 +361,27 @@ export const TimeEntry = (props) => {
                                                     <div className="form-group">
                                                         <div className="react-select">
                                                             <CustomSelect onChange={handleActivityTypeChange}
-                                                                          placeholder="Select Activity Type"
-                                                                          value={selectedActivityType}
-                                                                          isClearable={true}
-                                                                          options={activityTypes}/>
+                                                                placeholder="Select Activity Type"
+                                                                value={selectedActivityType}
+                                                                isClearable={true}
+                                                                options={activityTypes} />
                                                         </div>
-                                                        <FieldError error={errors.firmActivityTypeId}/>
+                                                        <FieldError error={errors.firmActivityTypeId} />
                                                     </div>
                                                     <div className="form-check form-switch mt-2">
-                                                        <input className="form-check-input" type="checkbox"
-                                                               id="flexSwitchCheckDefault"/>
+                                                        <input name="isBillable" className="form-check-input" type="checkbox"
+                                                            id="flexSwitchCheckDefault"
+                                                            onChange={(e) => setModelFields(pre => { return { ...pre, isBillable: e.target.checked } })} 
+                                                            value={modelFields.isBillable} checked={modelFields.isBillable} />
+
                                                         <label className="form-check-label"
-                                                               htmlFor="flexSwitchCheckDefault">This time entry is
+                                                            htmlFor="flexSwitchCheckDefault">This time entry is
                                                             Billable</label>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-2">
                                                     <a onClick={newActivityType} className="inputSameLink"
-                                                       href="javascript:;">Add New Activity</a>
+                                                        href="javascript:;">Add New Activity</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,14 +392,14 @@ export const TimeEntry = (props) => {
                                                 </div>
                                                 <div className="col-lg-6">
                                                     <div className="form-group">
-                                                    <textarea name="description" id="description"
-                                                              placeholder="Description"
-                                                              cols="30"
-                                                              className="form-control"
-                                                              onChange={handleChange}
-                                                              value={modelFields.description || ""}
-                                                              rows="5"/>
-                                                        <FieldError error={errors.description}/>
+                                                        <textarea name="description" id="description"
+                                                            placeholder="Description"
+                                                            cols="30"
+                                                            className="form-control"
+                                                            onChange={handleChange}
+                                                            value={modelFields.description || ""}
+                                                            rows="5" />
+                                                        <FieldError error={errors.description} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -371,29 +415,46 @@ export const TimeEntry = (props) => {
                                                             <div className="col-lg-4">
                                                                 <div className="form-group">
                                                                     <label htmlFor="">Date</label>
-                                                                    <input type="date" className="form-control"
-                                                                           placeholder=""/>
+                                                                    <input name="date" id="date" type="date" className="form-control"
+                                                                        placeholder=""
+                                                                        value={modelFields.date}
+                                                                        onChange={(e) => setModelFields(prev => { return { ...prev, date: e.target.value } })}
+
+                                                                    />
+
                                                                 </div>
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="d-flex">
                                                                     <div className="form-group">
                                                                         <label htmlFor="">Rate</label>
-                                                                        <input type="text" className="form-control"
-                                                                               placeholder="$"/>
+                                                                        <input name="rate" type="text" id="rate" className="form-control"
+                                                                            placeholder="$"
+                                                                            onChange={(e) => setModelFields(prevState => { return { ...prevState, rate: e.target.value } })}
+                                                                            value={modelFields.rate} />
+
                                                                     </div>
                                                                     <div className="form-group ms-2">
-                                                                        <label htmlFor="">/hour</label>
-                                                                        <input type="text" className="form-control"
-                                                                               placeholder="h"/>
+                                                                        <label htmlFor="" >hour/flat</label>
+                                                                        <select name="rateType" width="100" id="rateType" type="text" className="form-control"
+                                                                            placeholder="select"
+                                                                            value={modelFields.rateType}
+                                                                            onChange={(e) => setModelFields(prevState => { return { ...prevState, rateType: e.target.value } })}>
+                                                                            <option value="hourly">hourly</option>
+                                                                            <option value="flat">flat   </option>
+                                                                        </select>
+
+
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="form-group">
                                                                     <label htmlFor="">Duration</label>
-                                                                    <input type="text" className="form-control"
-                                                                           placeholder=""/>
+                                                                    <input name="duration" id="duration" type="text" className="form-control"
+                                                                        placeholder=""
+                                                                        onChange={(e) => setModelFields(pre => { return { ...pre, duration: e.target.value } })}
+                                                                        value={modelFields.duration} />
                                                                     <small>0.1 = 6 minute</small>
                                                                 </div>
                                                             </div>
@@ -410,7 +471,7 @@ export const TimeEntry = (props) => {
                                             </div>
                                             <div className="col-lg-3">
                                                 <button onClick={submit} className="btn btn-grey-common"
-                                                        type="submit">Save
+                                                    type="submit">Save
                                                 </button>
                                             </div>
                                         </div>
