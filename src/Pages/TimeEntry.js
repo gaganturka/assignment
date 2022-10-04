@@ -35,13 +35,13 @@ import { object } from "joi";
 export const TimeEntry = (props) => {
 
     const navigate = useNavigate();
-    const { updateEntry, setUpdateEntery } = useContext(AuthContext)
-// if(updateEntry.date.length > 0){
+    // const { updateEntry, setUpdateEntery } = useContext(AuthContext)
+    // if(updateEntry.date.length > 0){
     // updateEntry?date ? updateEntry.date.split('T')[0] : ""
-// }
+    // }
 
     const { modelId } = useParams();
-    console.log('asdadsadsdas',modelId);
+    console.log('asdadsadsdas', modelId);
 
 
     const [cases, setCases] = useState([]);
@@ -52,40 +52,41 @@ export const TimeEntry = (props) => {
 
     const [activityTypes, setActivityTypes] = useState([]);
     const [selectedActivityType, setSelectedActivityType] = useState(null);
-    const [change, setChange] = useState('')
-
+    // const [change, setChange] = useState('')
+    // console.log('uuuuuuuuuu',updateEntry);
     const [modelFields, setModelFields] = useState({
-        firmCaseId: updateEntry.firmCaseId ? updateEntry.firmCaseId : "",
-        firmCaseEmployeeId: updateEntry.firmCaseEmployeeId ? updateEntry.firmCaseEmployeeId : "",
-        firmActivityTypeId: updateEntry.firmActivityTypeId ? updateEntry.firmActivityTypeId : "",
-        isBillable: updateEntry.isBillable ? updateEntry.isBillable : "",
-        description: updateEntry.description ? updateEntry.description : "",
-        date: updateEntry.date ? updateEntry.date.split('T')[0] : "",
-        rate: updateEntry.rate ? updateEntry.rate : "",
-        duration: updateEntry.duration ? updateEntry.duration : "",
-        rateType: updateEntry.rateType ? updateEntry.rateType : "",
+        // firmCaseId: updateEntry.firmCaseId ? updateEntry.firmCaseId : "",
+        // firmCaseEmployeeId: updateEntry.firmCaseEmployeeId ? updateEntry.firmCaseEmployeeId : "",
+        // firmActivityTypeId: updateEntry.firmActivityTypeId ? updateEntry.firmActivityTypeId : "",
+        // isBillable: updateEntry.isBillable ? updateEntry.isBillable : "",
+        // description: updateEntry.description ? updateEntry.description : "",
+        // date: updateEntry.date ? updateEntry.date.split('T')[0] : "",
+        // rate: updateEntry.rate ? updateEntry.rate : "",
+        // duration: updateEntry.duration ? updateEntry.duration : "",
+        // rateType: updateEntry.rateType ? updateEntry.rateType : "",
     });
-    if (Object.keys(updateEntry) > 0) {
-        modelFields.firmCaseId = updateEntry.firmCaseId
-        modelFields.firmCaseEmployeeId = updateEntry.firmCaseEmployeeId
-        modelFields.firmActivityTypeId = updateEntry.firmActivityTypeId
-        modelFields.isBillable = updateEntry.isBillable
-        modelFields.description = updateEntry.description
-        // modelFields.date = updateEntry.date
-        modelFields.rate = updateEntry.rate
-        modelFields.duration = updateEntry.duration
-        modelFields.rateType = updateEntry.rateType
-        setChange('true')
+    // if (Object.keys(updateEntry) > 0) {
+    //     modelFields.firmCaseId = updateEntry.firmCaseId
+    //     modelFields.firmCaseEmployeeId = updateEntry.firmCaseEmployeeId
+    //     modelFields.firmActivityTypeId = updateEntry.firmActivityTypeId
+    //     modelFields.isBillable = updateEntry.isBillable
+    //     modelFields.description = updateEntry.description
+    //     modelFields.date = updateEntry.date 
+    //     modelFields.rate = updateEntry.rate
+    //     modelFields.duration = updateEntry.duration
+    //     modelFields.rateType = updateEntry.rateType
+    //     setChange('true')
 
-    } else {
-        console.log('')
+    // } else {
+    //     console.log('')
 
-    }
-    useEffect(() => {
-        console.log('not happen');
-    }, [change])
+    // }
+    // useEffect(() => {
+    //     console.log('not happen');
+    // }, [change])
 
 
+    console.log('modal', modelFields);
 
 
     const [errors, setErrors] = useState({});
@@ -132,7 +133,7 @@ export const TimeEntry = (props) => {
             if (modelId === undefined) {
                 request = timeExpenseActions.createTimeEntry(modelFields);
             } else {
-                request = timeExpenseActions.updateEntry(modelId, modelFields);
+                request = timeExpenseActions.updateEntery(modelId, modelFields);
             }
             request.then((res) => {
                 toast('Time Entry has been saved');
@@ -178,17 +179,20 @@ export const TimeEntry = (props) => {
         if (modelId !== undefined) {
             showLoading();
             timeExpenseActions.getEntry(modelId).then(res => {
+                console.log('rfrf', res);
                 hideLoading();
                 setModelFields(res);
+                modelFields.firmCaseId = res?.firmCaseId;
+                // console.log('modal', modelFields);
                 loadCaseEmployees();
             }).catch(err => {
                 toast('Failed to load');
                 hideLoading();
                 navigate('/clients');
             });
-        } //else{
-            //setModelFields('')
-       // }
+        } else {
+            setModelFields({})
+        }
     }, [modelId]);
 
     const loadCases = () => {
@@ -371,7 +375,7 @@ export const TimeEntry = (props) => {
                                                     <div className="form-check form-switch mt-2">
                                                         <input name="isBillable" className="form-check-input" type="checkbox"
                                                             id="flexSwitchCheckDefault"
-                                                            onChange={(e) => setModelFields(pre => { return { ...pre, isBillable: e.target.checked } })} 
+                                                            onChange={(e) => setModelFields(pre => { return { ...pre, isBillable: e.target.checked } })}
                                                             value={modelFields.isBillable} checked={modelFields.isBillable} />
 
                                                         <label className="form-check-label"
@@ -417,7 +421,7 @@ export const TimeEntry = (props) => {
                                                                     <label htmlFor="">Date</label>
                                                                     <input name="date" id="date" type="date" className="form-control"
                                                                         placeholder=""
-                                                                        value={modelFields.date}
+                                                                        value={modelFields.date ? modelFields.date.split('T')[0] : ""}
                                                                         onChange={(e) => setModelFields(prev => { return { ...prev, date: e.target.value } })}
 
                                                                     />
@@ -440,7 +444,8 @@ export const TimeEntry = (props) => {
                                                                             placeholder="select"
                                                                             value={modelFields.rateType}
                                                                             onChange={(e) => setModelFields(prevState => { return { ...prevState, rateType: e.target.value } })}>
-                                                                            <option value="hourly">hourly</option>
+                                                                            <option value="">Choose here</option>
+                                                                            <option value="hourly" >hourly</option>
                                                                             <option value="flat">flat   </option>
                                                                         </select>
 

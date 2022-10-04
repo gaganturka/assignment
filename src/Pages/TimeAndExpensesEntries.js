@@ -9,7 +9,7 @@ import ReactPaginate from "react-paginate";
 export const TimeAndExpensesEntries = () => {
 
 
-    const { updateEntry, setUpdateEntery } = useContext(AuthContext)
+    // const { updateEntry, setUpdateEntery } = useContext(AuthContext)
     let [allEnteries, setAllEnteries] = useState([])
     const [description, setDescription] = useState('')
     const [startingDate, setStartingDate] = useState('')
@@ -49,8 +49,8 @@ export const TimeAndExpensesEntries = () => {
     
 
     const update = ((value) => {
-        console.log('valueeeeeeeeee', value);
-        setUpdateEntery(value)
+        // console.log('valueeeeeeeeee', value);
+        // setUpdateEntery(value)
         navigate(`${value._id}/edit`)
     })
 
@@ -85,7 +85,7 @@ export const TimeAndExpensesEntries = () => {
     };
 
 
-    console.log('filter', description, startingDate, endDate);
+    // console.log('filter', description, startingDate, endDate);
 
     console.log('all', allEnteries)
     return (
