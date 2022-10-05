@@ -31,6 +31,7 @@ import {CaseDetails} from "../Pages/CaseDetails";
 import {TimeAndExpensesEntries} from "../Pages/TimeAndExpensesEntries";
 import {ActivityTypes} from "../Pages/ActivityTypes";
 import AddLocation from '../Pages/AddLocation';
+import {ExpensesEntries} from '../Pages/expenseEntery'
 
 const afterLoginRoutes = (
     <Routes>
@@ -116,6 +117,13 @@ const afterLoginRoutes = (
             path="/time-expenses"
             key="time-expenses"
             element={<TimeAndExpensesEntries/>}
+        />
+
+        <Route
+        exact
+        path="/time-expenses/expenses/create"
+        key="expenses"
+        element={<ExpensesEntries/>}
         />
 
         <Route
