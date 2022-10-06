@@ -39,8 +39,8 @@ export const getExpenseEntries = (params = {}) => {
     return http.get('/firm/case-expense-entries', params)
 }
 
-export const viewExpenseEntry = (id, params = {}) => {
-    return http.get('/firm/case-expense-entries/' + id, params)
+export const viewExpenseEntry = (id) => {
+    return http.get('/firm/case-expense-entries/' + id)
 }
 
 export const createExpenseEntry = (values) => {

@@ -1,8 +1,8 @@
 import React from 'react';
-import {Router, Route} from 'react-router';
-import {Cases} from "../Pages/Cases";
-import {Case} from "../Pages/Case";
-import {TimeEntry} from "../Pages/TimeEntry";
+import { Router, Route } from 'react-router';
+import { Cases } from "../Pages/Cases";
+import { Case } from "../Pages/Case";
+import { TimeEntry } from "../Pages/TimeEntry";
 import ViewInvoices from "../Pages/ViewInvoices";
 import AddInvoice from "../Pages/AddInvoice";
 import ViewRequestedFunds from "../Pages/ViewRequestedFunds";
@@ -16,22 +16,22 @@ import ManageRole from "../Pages/ManageRole";
 import AddRole from "../Pages/AddRole";
 import ManageSalaries from "../Pages/ManageSalaries";
 import ManageSubscriptions from "../Pages/ManageSubscriptions";
-import {CaseStages} from '../Pages/CaseStages';
-import {EditEmployee} from '../Pages/EditEmployee'
+import { CaseStages } from '../Pages/CaseStages';
+import { EditEmployee } from '../Pages/EditEmployee'
 import Settings from "../Pages/Settings";
 import PageNotFound from "../Pages/PageNotFound";
-import {Routes} from "react-router-dom";
-import {PracticeAreas} from "../Pages/PracticeAreas";
-import {Companies} from "../Pages/Companies";
-import {Client} from "../Pages/Client";
-import {Clients} from "../Pages/Clients";
-import {ManageLocation} from "../Pages/ManageLocation"
-import {ContactGroups} from "../Pages/ContactGroups";
-import {CaseDetails} from "../Pages/CaseDetails";
-import {TimeAndExpensesEntries} from "../Pages/TimeAndExpensesEntries";
-import {ActivityTypes} from "../Pages/ActivityTypes";
+import { Routes } from "react-router-dom";
+import { PracticeAreas } from "../Pages/PracticeAreas";
+import { Companies } from "../Pages/Companies";
+import { Client } from "../Pages/Client";
+import { Clients } from "../Pages/Clients";
+import { ManageLocation } from "../Pages/ManageLocation"
+import { ContactGroups } from "../Pages/ContactGroups";
+import { CaseDetails } from "../Pages/CaseDetails";
+import { TimeAndExpensesEntries } from "../Pages/TimeAndExpensesEntries";
+import { ActivityTypes } from "../Pages/ActivityTypes";
 import AddLocation from '../Pages/AddLocation';
-import {ExpensesEntries} from '../Pages/expenseEntery'
+import { ExpensesEntries } from '../Pages/expenseEntery'
 
 const afterLoginRoutes = (
     <Routes>
@@ -39,216 +39,223 @@ const afterLoginRoutes = (
             exact
             path="/"
             key="clients"
-            element={<Clients/>}
+            element={<Clients />}
         />
 
         <Route
             exact
             path="/addLocation"
             key="AddLocation"
-            element={<AddLocation/>}
+            element={<AddLocation />}
         />
 
         <Route
             exact
             path="/manageLocation"
             key="manageLocation"
-            element={<ManageLocation/>}
+            element={<ManageLocation />}
         />
 
         <Route
             exact
             path="/clients"
             key="clients"
-            element={<Clients/>}
+            element={<Clients />}
         />
 
         <Route
             exact
             path="/clients/new"
             key="newClient"
-            element={<Client/>}
+            element={<Client />}
         />
 
         <Route
             exact
             path="/clients/:modelId/edit"
             key="editClient"
-            element={<Client/>}
+            element={<Client />}
         />
 
         <Route
             exact
             path="/companies"
             key="companies"
-            element={<Companies/>}
+            element={<Companies />}
         />
 
         <Route
             exact
             path="/cases"
             key="cases"
-            element={<Cases/>}
+            element={<Cases />}
         />
 
         <Route
             exact
             path="/cases/create"
             key="newCase"
-            element={<Case/>}
+            element={<Case />}
         />
 
         <Route
             exact
             path="/cases/:modelId/edit"
             key="editCase"
-            element={<Case/>}
+            element={<Case />}
         />
 
         <Route
             exact
             path="/cases/:modelId/case-details"
             key="caseDetails"
-            element={<CaseDetails/>}
+            element={<CaseDetails />}
         />
 
         <Route
             exact
             path="/time-expenses"
             key="time-expenses"
-            element={<TimeAndExpensesEntries/>}
+            element={<TimeAndExpensesEntries />}
         />
 
         <Route
-        exact
-        path="/time-expenses/expenses/create"
-        key="expenses"
-        element={<ExpensesEntries/>}
+            exact
+            path="/time-expenses/expenses/create"
+            key="expenses"
+            element={<ExpensesEntries />}
         />
 
         <Route
             exact
             path="/time-expenses/:modelId/edit"
             key="createTimeEntry"
-            element={<TimeEntry/>}
+            element={<TimeEntry />}
         />
 
-             <Route
+        <Route
+            exact
+            path="/time-expenses/:modelId/editexpense"
+            key="updateExpenseEntry"
+            element={<ExpensesEntries />}
+        />
+
+        <Route
             exact
             path="/time-expenses/times/create"
             key="createTimeEntry"
-            element={<TimeEntry/>}
+            element={<TimeEntry />}
         />
-       
+
 
         <Route
             exact
             path="/viewInvoices"
             key="viewInvoices"
-            element={<ViewInvoices/>}
+            element={<ViewInvoices />}
         />
         <Route
             exact
             path="/addInvoice"
             key="addInvoice"
-            element={<AddInvoice/>}
+            element={<AddInvoice />}
         />
         <Route
             exact
             path="/viewRequestedFunds"
             key="viewRequestedFunds"
-            element={<ViewRequestedFunds/>}
+            element={<ViewRequestedFunds />}
         />
         <Route
             exact
             path="/addRequestFund"
             key="addRequestFund"
-            element={<AddRequestFund/>}
+            element={<AddRequestFund />}
         />
         <Route
             exact
             path="/statement"
             key="statement"
-            element={<Statement/>}
+            element={<Statement />}
         />
 
-        <Route exact path="/events" key="events" element={<Events/>}/>
+        <Route exact path="/events" key="events" element={<Events />} />
 
         <Route
             exact
             path="/addEvent"
             key="addEvent"
-            element={<AddEvent/>}
+            element={<AddEvent />}
         />
         <Route
             exact
             path="/manageEmployee"
             key="manageEmployee"
-            element={<ManageEmployee/>}
+            element={<ManageEmployee />}
         />
         <Route
             exact
             path="/addEmployee"
             key="addEmployee"
-            element={<AddEmployee/>}
+            element={<AddEmployee />}
         />
         <Route
             exact
             path="/editEmployee/:employeeId"
             key="editEmployee"
-            element={<EditEmployee/>}
+            element={<EditEmployee />}
         />
         <Route
             exact
             path="/manageRole"
             key="manageRole"
-            element={<ManageRole/>}
+            element={<ManageRole />}
         />
-        <Route exact path="/addRole" key="addRole" element={<AddRole/>}/>
-        <Route exact path="/editRole/:roleId" key="addRole" element={<AddRole/>}/>
+        <Route exact path="/addRole" key="addRole" element={<AddRole />} />
+        <Route exact path="/editRole/:roleId" key="addRole" element={<AddRole />} />
         <Route
             exact
             path="/manageSalaries"
             key="manageSalaries"
-            element={<ManageSalaries/>}
+            element={<ManageSalaries />}
         />
         <Route
             exact
             path="/manageSubscriptions"
             key="manageSubscriptions"
-            element={<ManageSubscriptions/>}
+            element={<ManageSubscriptions />}
         />
         <Route
             exact
             path="/settings"
             key="settings"
-            element={<Settings/>}
+            element={<Settings />}
         />
         <Route
             exact
             path="/contact-groups"
             key="contact-groups"
-            element={<ContactGroups/>}
+            element={<ContactGroups />}
         />
         <Route
             exact
             path="/case-stages"
             key="case-stages"
-            element={<CaseStages/>}
+            element={<CaseStages />}
         />
         <Route
             exact
             path="/activity-types"
             key="activityTypes"
-            element={<ActivityTypes/>}
+            element={<ActivityTypes />}
         />
         <Route
             exact
             path="/practice-areas"
             key="practice-areas"
-            element={<PracticeAreas/>}
+            element={<PracticeAreas />}
         />
-        <Route path="*" element={<PageNotFound/>}/>
+        <Route path="*" element={<PageNotFound />} />
     </Routes>
 );
 

@@ -1,5 +1,5 @@
 import { React, useEffect, useContext, useState } from "react";
-import { Link, useNavigate, useSearchParams ,Outlet } from "react-router-dom";
+import { Link, useNavigate, useSearchParams, Outlet } from "react-router-dom";
 import * as timeExpenseActions from "../Services/Actions/TimeExpenseActions";
 import { AuthContext } from "../Context/AuthContext"
 import ReactPaginate from "react-paginate";
@@ -15,6 +15,7 @@ export const TimeAndExpensesEntries = () => {
     const [startingDate, setStartingDate] = useState('')
     const [endDate, setendDate] = useState('')
     const [re, setRe] = useState('')
+    const [modelFields, setModelFields] = useState('')
 
     const [paginationData, setPaginationData] = useState({
         docs: [],
@@ -31,27 +32,41 @@ export const TimeAndExpensesEntries = () => {
 
     const navigate = useNavigate()
     useEffect(() => {
-        fetchData();
-
-        // async function fetchData() {
-        //     let data = await timeExpenseActions.viewAllEntries({description, startingDate, endDate})
-        //     setAllEnteries(data)
-        // }
-        // fetchData();
-    }, [re]); // Or [] if effect doesn't need props or state
+        console.log("modelFields  ->   " + modelFields);
+        if (modelFields == 'timeEntry' || modelFields === '') {
+            console.log("fetch time");
+            fetchData();
+        } else {
+            console.log("fetch expense");
+            fetchExpenseData();
+        }
+    }, [re, modelFields]); // Or [] if effect doesn't need props or state
 
     const fetchData = async (pageNumber = 1) => {
         let data = await timeExpenseActions.viewAllEntries({ description, startingDate, endDate, page: pageNumber, })
         // setAllEnteries(data)
+        console.log('expenseeee', data);
+
         setPaginationData(data)
     }
 
-    
+    const fetchExpenseData = async (pageNumber = 1) => {
+        let data = await timeExpenseActions.getAllExpenseEntries({  description, startingDate, endDate,page: pageNumber })
+        console.log('expense', data);
+        setPaginationData(data)
+    }
+
+
 
     const update = ((value) => {
-        // console.log('valueeeeeeeeee', value);
+        console.log('valueeeeeeeeee', value);
         // setUpdateEntery(value)
         navigate(`${value._id}/edit`)
+    })
+
+    const updateExpense =((value)=> {
+        console.log('vaaaaalue', value);
+        navigate(`${value._id}/editexpense`)
     })
 
     const descriptionUpdate = (e) => {
@@ -67,7 +82,7 @@ export const TimeAndExpensesEntries = () => {
     }
     const handelFilter = () => {
         fetchData();
-        
+
     }
 
     const handelClear = (e) => {
@@ -84,10 +99,17 @@ export const TimeAndExpensesEntries = () => {
         fetchData(current);
     };
 
+    const handelChange = (e) => {
+        setModelFields(e)
+        console.log('dfsdfsdfsfdfds', modelFields);
+    }
 
     // console.log('filter', description, startingDate, endDate);
 
     console.log('all', allEnteries)
+    console.log('dsasdasdasdasdas', modelFields);
+
+
     return (
         <>
             {
@@ -102,12 +124,6 @@ export const TimeAndExpensesEntries = () => {
                                 <div className="">
                                     <div className="admin-title-flex">
                                         <h3>Time & Expense Management</h3>
-                                        <ul className="archive-ul">
-                                            <li className="active"><a href={undefined}>Open</a></li>
-                                            <li><a href={undefined}>Invoiced</a></li>
-                                            <li><a href={undefined}>All Entries</a></li>
-                                            <li><a href={undefined}>Imported</a></li>
-                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -138,10 +154,25 @@ export const TimeAndExpensesEntries = () => {
                         <div className="row align-items-center">
                             <div className="col-lg">
 
+
                             </div>
+
+                            <div className="col-lg">
+                                <label htmlFor="" >Time/Expense</label>
+                                <select name="rateType"  id="rateType" type="text" className="form-control"
+                                    placeholder="select"
+                                    // value={modelFields.rateType}
+                                    onChange={(e) => handelChange(e.target.value)}
+                                >
+                                    <option value="">Choose here</option>
+                                    <option value="ExpenseEntry" >ExpenseEntry</option>
+                                    <option value="timeEntry">TimeEntry</option>
+                                </select>
+                            </div>
+
                             <div className="col-lg">
                                 <div className="filter-input-box" >
-                                    <input type="text" className="form-control" placeholder="Search by team" value={description} onChange={descriptionUpdate} />
+                                    <input type="text" width="10px" className="form-control" placeholder="Search by team" value={description} onChange={descriptionUpdate} />
                                     <img src="/assets/img/search-icon.png" alt="" />
                                 </div>
                             </div>
@@ -187,11 +218,20 @@ export const TimeAndExpensesEntries = () => {
                                                         <tr>
                                                             <th>Date</th>
                                                             <th>Activity</th>
-
-                                                            <th>Duration</th>
-
                                                             <th>Description</th>
-                                                            <th>Rate</th>
+
+                                                            {modelFields == 'timeEntry' || modelFields === '' ?
+                                                                <>
+                                                                    <th>Duration</th>
+                                                                    <th>Rate</th>
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    <th>quantity</th>
+                                                                    <th>cost</th>
+                                                                </>
+                                                            }
+
                                                             <th>Total</th>
 
                                                             <th>&nbsp;</th>
@@ -206,19 +246,29 @@ export const TimeAndExpensesEntries = () => {
                                                                 <td>
                                                                     <h6>{item.firmActivityTypeId}</h6>
                                                                 </td>
-
-                                                                <td>
-                                                                    <h6>{item.duration} </h6>
-                                                                </td>
-
                                                                 <td>
                                                                     <h6>{item.description}
                                                                     </h6>
                                                                 </td>
-                                                                <td>
-                                                                    {item.rate}
-
-                                                                </td>
+                                                                {modelFields == 'timeEntry' || modelFields === '' ?
+                                                                    <>
+                                                                        <td>
+                                                                            <h6>{item.duration} </h6>
+                                                                        </td>
+                                                                        <td>
+                                                                            {item.rate}
+                                                                        </td>
+                                                                    </> 
+                                                                    :
+                                                                    <>
+                                                                        <td>
+                                                                            <h6>{item.quantity} </h6>
+                                                                        </td>
+                                                                        <td>
+                                                                            {item.cost}
+                                                                        </td>
+                                                                    </>
+                                                                }
                                                                 <td>
                                                                     <h6>{item.amount}</h6>
                                                                 </td>
@@ -226,8 +276,14 @@ export const TimeAndExpensesEntries = () => {
                                                                 <td>
                                                                     <div className="action-btn-group">
                                                                         {/* <a href="add-time-entry.html"> */}
+                                                                        { modelFields == 'timeEntry' || modelFields === '' ?
                                                                         <button onClick={() => update(item)} className="btn black-fill" type="button">Edit
                                                                         </button>
+                                                                        :
+                                                                        <button onClick={() => updateExpense(item)} className="btn black-fill" type="button">Edit
+                                                                        </button>
+
+}
                                                                         {/* </a> */}
                                                                         {/* <button className="btn black-fill" type="button"><img
                                                                             src="/assets/img/eye-icon-black.png" alt="" />

@@ -41,7 +41,7 @@ export const ExpensesEntries = (props) => {
     // }
 
     const { modelId } = useParams();
-    console.log('asdadsadsdas', modelId);
+    console.log('expensepage', modelId);
 
 
     const [cases, setCases] = useState([]);
@@ -133,7 +133,7 @@ export const ExpensesEntries = (props) => {
             if (modelId === undefined) {
                 request = timeExpenseActions.createExpenseEntry(modelFields);
             } else {
-                request = timeExpenseActions.updateEntery(modelId, modelFields);
+                request = timeExpenseActions.updateExpenseEntry(modelId, modelFields);
             }
             request.then((res) => {
                 toast('Time Entry has been saved');
@@ -178,7 +178,7 @@ export const ExpensesEntries = (props) => {
     useEffect(() => {
         if (modelId !== undefined) {
             showLoading();
-            timeExpenseActions.getEntry(modelId).then(res => {
+            timeExpenseActions.viewExpenseEntry(modelId).then(res => {
                 console.log('rfrf', res);
                 hideLoading();
                 setModelFields(res);
@@ -443,11 +443,11 @@ export const ExpensesEntries = (props) => {
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="form-group">
-                                                                    <label htmlFor="">Quantity</label>
-                                                                    <input name="Quantity" id="Quantity" type="text" className="form-control"
+                                                                    <label htmlFor="">quantity</label>
+                                                                    <input name="quantity" id="quantity" type="text" className="form-control"
                                                                         placeholder=""
-                                                                        onChange={(e) => setModelFields(pre => { return { ...pre, Quantity: e.target.value } })}
-                                                                        value={modelFields.Quantity} />
+                                                                        onChange={(e) => setModelFields(pre => { return { ...pre, quantity: e.target.value } })}
+                                                                        value={modelFields.quantity} />
                                                                 </div>
                                                             </div>
                                                         </div>
