@@ -32,3 +32,11 @@ export const cities = (countryCode, stateCode) => {
         stateCode
     })
 }
+
+export const invoiceStatuses = (params = {}) => {
+    return http.get('/common/invoices/statuses', params)
+}
+
+export const invoicePaymentTerms = (params = {}) => {
+    return http.get('/common/invoices/payment-terms', params)
+}

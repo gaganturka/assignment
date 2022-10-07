@@ -21,3 +21,7 @@ export const create = (values) => {
 export const update = (id, values) => {
     return http.patch('/firm/contacts/' + id, values)
 }
+
+export const getCasesByContact = (id) => {
+    return http.get('/firm/contacts/cases/' + id)
+}

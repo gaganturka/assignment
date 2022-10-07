@@ -3,8 +3,8 @@ import {Router, Route} from 'react-router';
 import {Cases} from "../Pages/Cases";
 import {Case} from "../Pages/Case";
 import {TimeEntry} from "../Pages/TimeEntry";
-import ViewInvoices from "../Pages/ViewInvoices";
-import AddInvoice from "../Pages/AddInvoice";
+import {Invoices} from "../Pages/Invoices";
+import {Invoice} from "../Pages/Invoice";
 import ViewRequestedFunds from "../Pages/ViewRequestedFunds";
 import AddRequestFund from "../Pages/AddRequestFund";
 import Statement from "../Pages/Statement";
@@ -31,6 +31,7 @@ import {CaseDetails} from "../Pages/CaseDetails";
 import {TimeAndExpensesEntries} from "../Pages/TimeAndExpensesEntries";
 import {ActivityTypes} from "../Pages/ActivityTypes";
 import AddLocation from '../Pages/AddLocation';
+import {InvoiceDetails} from "../Pages/InvoiceDetails";
 
 const afterLoginRoutes = (
     <Routes>
@@ -125,26 +126,42 @@ const afterLoginRoutes = (
             element={<TimeEntry/>}
         />
 
-             <Route
+        <Route
             exact
             path="/time-expenses/times/create"
             key="createTimeEntry"
             element={<TimeEntry/>}
         />
-       
+
 
         <Route
             exact
-            path="/viewInvoices"
-            key="viewInvoices"
-            element={<ViewInvoices/>}
+            path="/invoices"
+            key="invoices"
+            element={<Invoices/>}
         />
+
         <Route
             exact
-            path="/addInvoice"
-            key="addInvoice"
-            element={<AddInvoice/>}
+            path="/invoices/new"
+            key="newInvoice"
+            element={<Invoice/>}
         />
+
+        <Route
+            exact
+            path="/invoices/:modelId/edit"
+            key="editInvoice"
+            element={<Invoice/>}
+        />
+
+        <Route
+            exact
+            path="/invoices/:modelId/view"
+            key="viewInvoice"
+            element={<InvoiceDetails/>}
+        />
+
         <Route
             exact
             path="/viewRequestedFunds"
