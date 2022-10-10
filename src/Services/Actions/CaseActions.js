@@ -25,3 +25,7 @@ export const update = (id, values) => {
 export const caseEmployees = (id, params = {}) => {
     return http.get('/firm/cases/case-employees/' + id, params)
 }
+
+export const invoiceAbleItems = (id, params = {}) => {
+    return http.get('/firm/cases/invoice-items/' + id, params)
+}

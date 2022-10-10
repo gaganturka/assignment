@@ -17,8 +17,8 @@ export const viewTimeEntry = (id, params = {}) => {
 export const createTimeEntry = (values) => {
     return http.post('firm/time-entry/', values)
 }
-export const updateEntry = (id, values) => {
-    return http.post('firm/time-entry/'+id, values)
+export const updateEntery = (id, values) => {
+    return http.patch('firm/time-entry/'+id, values)
 }
 
 export const getEntry = (id) => {
@@ -39,8 +39,8 @@ export const getExpenseEntries = (params = {}) => {
     return http.get('/firm/case-expense-entries', params)
 }
 
-export const viewExpenseEntry = (id, params = {}) => {
-    return http.get('/firm/case-expense-entries/' + id, params)
+export const viewExpenseEntry = (id) => {
+    return http.get('/firm/case-expense-entries/' + id)
 }
 
 export const createExpenseEntry = (values) => {

@@ -32,7 +32,7 @@ import ActivityTypeFormModal from "../Componenets/ActivityTypeFormModal";
 import { CustomSelect } from "../Componenets/CustomSelect";
 import { object } from "joi";
 
-export const TimeEntry = (props) => {
+export const ExpensesEntries = (props) => {
 
     const navigate = useNavigate();
     // const { updateEntry, setUpdateEntery } = useContext(AuthContext)
@@ -41,7 +41,7 @@ export const TimeEntry = (props) => {
     // }
 
     const { modelId } = useParams();
-    console.log('asdadsadsdas', modelId);
+    console.log('expensepage', modelId);
 
 
     const [cases, setCases] = useState([]);
@@ -96,8 +96,8 @@ export const TimeEntry = (props) => {
         firmActivityTypeId: Joi.required(),
         isBillable: Joi.required(),
         description: Joi.required(),
-        rate: Joi.required(),
-        rateType: Joi.required(),
+        cost: Joi.required(),
+        // rateType: Joi.required(),
     };
 
     const updateModelFieldValue = (name, value) => {
@@ -131,9 +131,9 @@ export const TimeEntry = (props) => {
             showLoading();
             let request = null;
             if (modelId === undefined) {
-                request = timeExpenseActions.createTimeEntry(modelFields);
+                request = timeExpenseActions.createExpenseEntry(modelFields);
             } else {
-                request = timeExpenseActions.updateEntery(modelId, modelFields);
+                request = timeExpenseActions.updateExpenseEntry(modelId, modelFields);
             }
             request.then((res) => {
                 toast('Time Entry has been saved');
@@ -178,7 +178,7 @@ export const TimeEntry = (props) => {
     useEffect(() => {
         if (modelId !== undefined) {
             showLoading();
-            timeExpenseActions.getEntry(modelId).then(res => {
+            timeExpenseActions.viewExpenseEntry(modelId).then(res => {
                 console.log('rfrf', res);
                 hideLoading();
                 setModelFields(res);
@@ -288,7 +288,7 @@ export const TimeEntry = (props) => {
                             <div className="col-lg-6">
                                 <div className="">
                                     <div className="admin-title-flex">
-                                        <h3>{modelId ? 'Update Time Entry' : 'Add Time Entry'}</h3>
+                                        <h3>{modelId ? 'Update Time Entry' : 'Add Expense Entry'}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -431,36 +431,23 @@ export const TimeEntry = (props) => {
                                                             <div className="col-lg-4">
                                                                 <div className="d-flex">
                                                                     <div className="form-group">
-                                                                        <label htmlFor="">Rate</label>
-                                                                        <input name="rate" type="text" id="rate" className="form-control"
+                                                                        <label htmlFor="">cost</label>
+                                                                        <input name="cost" type="text" id="cost" className="form-control"
                                                                             placeholder="$"
-                                                                            onChange={(e) => setModelFields(prevState => { return { ...prevState, rate: e.target.value } })}
-                                                                            value={modelFields.rate} />
+                                                                            onChange={(e) => setModelFields(prevState => { return { ...prevState, cost: e.target.value } })}
+                                                                            value={modelFields.cost} />
 
                                                                     </div>
-                                                                    <div className="form-group ms-2">
-                                                                        <label htmlFor="" >hour/flat</label>
-                                                                        <select name="rateType" width="100" id="rateType" type="text" className="form-control"
-                                                                            placeholder="select"
-                                                                            value={modelFields.rateType}
-                                                                            onChange={(e) => setModelFields(prevState => { return { ...prevState, rateType: e.target.value } })}>
-                                                                            <option value="">Choose here</option>
-                                                                            <option value="hourly" >hourly</option>
-                                                                            <option value="flat">flat   </option>
-                                                                        </select>
-
-
-                                                                    </div>
+                           
                                                                 </div>
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="form-group">
-                                                                    <label htmlFor="">Duration</label>
-                                                                    <input name="duration" id="duration" type="text" className="form-control"
+                                                                    <label htmlFor="">quantity</label>
+                                                                    <input name="quantity" id="quantity" type="text" className="form-control"
                                                                         placeholder=""
-                                                                        onChange={(e) => setModelFields(pre => { return { ...pre, duration: e.target.value } })}
-                                                                        value={modelFields.duration} />
-                                                                    <small>0.1 = 6 minute</small>
+                                                                        onChange={(e) => setModelFields(pre => { return { ...pre, quantity: e.target.value } })}
+                                                                        value={modelFields.quantity} />
                                                                 </div>
                                                             </div>
                                                         </div>

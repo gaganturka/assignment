@@ -1,23 +1,25 @@
 import React from 'react';
+<<<<<<< HEAD
 import {Router, Route} from 'react-router';
 import {Cases} from "../Pages/Cases";
 import {Case} from "../Pages/Case";
 import {TimeEntry} from "../Pages/TimeEntry";
 import {Invoices} from "../Pages/Invoices";
 import {Invoice} from "../Pages/Invoice";
+=======
 import { Router, Route } from 'react-router';
 import { Cases } from "../Pages/Cases";
 import { Case } from "../Pages/Case";
 import { TimeEntry } from "../Pages/TimeEntry";
 import ViewInvoices from "../Pages/ViewInvoices";
 import AddInvoice from "../Pages/AddInvoice";
+>>>>>>> 39da525309def37230c1483b1e1f5447dc5babbf
 import ViewRequestedFunds from "../Pages/ViewRequestedFunds";
 import AddRequestFund from "../Pages/AddRequestFund";
 import Statement from "../Pages/Statement";
 import Events from "../Pages/Events";
 import AddEvent from "../Pages/AddEvent";
 import ManageEmployee from "../Pages/ManageEmployee";
-import ManageBankAccount from "../Pages/ManageBankAccount";
 import AddEmployee from "../Pages/AddEmployee";
 import ManageRole from "../Pages/ManageRole";
 import AddRole from "../Pages/AddRole";
@@ -38,11 +40,11 @@ import { CaseDetails } from "../Pages/CaseDetails";
 import { TimeAndExpensesEntries } from "../Pages/TimeAndExpensesEntries";
 import { ActivityTypes } from "../Pages/ActivityTypes";
 import AddLocation from '../Pages/AddLocation';
-
+<<<<<<< HEAD
 import {InvoiceDetails} from "../Pages/InvoiceDetails";
-
+=======
 import { ExpensesEntries } from '../Pages/expenseEntery'
-
+>>>>>>> 39da525309def37230c1483b1e1f5447dc5babbf
 
 const afterLoginRoutes = (
     <Routes>
@@ -57,21 +59,21 @@ const afterLoginRoutes = (
             exact
             path="/addLocation"
             key="AddLocation"
-            element={<AddLocation/>}
+            element={<AddLocation />}
         />
 
         <Route
             exact
-            path="/manage-location"
-            key="manage-location"
-            element={<ManageLocation/>}
+            path="/manageLocation"
+            key="manageLocation"
+            element={<ManageLocation />}
         />
 
         <Route
             exact
             path="/clients"
             key="clients"
-            element={<Clients/>}
+            element={<Clients />}
         />
 
         <Route
@@ -155,8 +157,10 @@ const afterLoginRoutes = (
             exact
             path="/time-expenses/times/create"
             key="createTimeEntry"
-            element={<TimeEntry/>}
+            element={<TimeEntry />}
         />
+
+<<<<<<< HEAD
 
         <Route
             exact
@@ -170,6 +174,14 @@ const afterLoginRoutes = (
             path="/invoices/new"
             key="newInvoice"
             element={<Invoice/>}
+=======
+
+        <Route
+            exact
+            path="/viewInvoices"
+            key="viewInvoices"
+            element={<ViewInvoices />}
+>>>>>>> 39da525309def37230c1483b1e1f5447dc5babbf
         />
 
         <Route
@@ -181,29 +193,28 @@ const afterLoginRoutes = (
 
         <Route
             exact
+<<<<<<< HEAD
             path="/invoices/:modelId/view"
             key="viewInvoice"
             element={<InvoiceDetails/>}
+=======
+            path="/addInvoice"
+            key="addInvoice"
+            element={<AddInvoice />}
+>>>>>>> 39da525309def37230c1483b1e1f5447dc5babbf
         />
 
         <Route
             exact
-            path="/view-requested-funds"
-            key="view-requested-funds"
-            element={<ViewRequestedFunds/>}
+            path="/viewRequestedFunds"
+            key="viewRequestedFunds"
+            element={<ViewRequestedFunds />}
         />
         <Route
             exact
-            path="/add-request-fund"
-            key="add-request-fund"
-            element={<AddRequestFund/>}
-        />
-          <Route
-            exact
-            path="edit-request-fund/:requestFundId"
-            key="/edit-request-fund"
-            element={<AddRequestFund/>}
-
+            path="/addRequestFund"
+            key="addRequestFund"
+            element={<AddRequestFund />}
         />
         <Route
             exact
@@ -216,43 +227,36 @@ const afterLoginRoutes = (
 
         <Route
             exact
-            path="/add-event"
-            key="add-event"
-            element={<AddEvent/>}
+            path="/addEvent"
+            key="addEvent"
+            element={<AddEvent />}
         />
         <Route
             exact
-            path="/manage-employee"
-            key="manage-employee"
-            element={<ManageEmployee/>}
+            path="/manageEmployee"
+            key="manageEmployee"
+            element={<ManageEmployee />}
         />
         <Route
             exact
-            path="/manage-bank-account"
-            key="manage-bank-account"
-            element={<ManageBankAccount/>}
+            path="/addEmployee"
+            key="addEmployee"
+            element={<AddEmployee />}
         />
         <Route
             exact
-            path="/add-employee"
-            key="add-employee"
-            element={<AddEmployee/>}
+            path="/editEmployee/:employeeId"
+            key="editEmployee"
+            element={<EditEmployee />}
         />
         <Route
             exact
-            path="/edit-employee/:employeeId"
-            key="edit-employee"
-            element={<EditEmployee/>}
+            path="/manageRole"
+            key="manageRole"
+            element={<ManageRole />}
         />
-        <Route
-            exact
-            path="/manage-role"
-            key="manage-role"
-            element={<ManageRole/>}
-        />
-        <Route exact path="/add-role" key="add-role" element={<AddRole/>}/>
-        <Route exact path="/edit-role/:roleId" key="edit-role" element={<AddRole/>}/>
-
+        <Route exact path="/addRole" key="addRole" element={<AddRole />} />
+        <Route exact path="/editRole/:roleId" key="addRole" element={<AddRole />} />
         <Route
             exact
             path="/manageSalaries"

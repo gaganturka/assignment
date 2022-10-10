@@ -317,6 +317,7 @@ export const validateJOIFormField = (formFields, schema) => {
         return null;
     } else {
         const errorData = {};
+        console.log(error.details);
         for (let item of error.details) {
             const name = item.path[0];
             errorData[name] = item.message;
@@ -353,11 +354,12 @@ export const extractNameValue = (target) => {
     }
 }
 
-export const formatAmount = (amount) => {
+export const formatAmount = (amount, defaultValue = '') => {
     if (amount !== '' && amount !== undefined && amount !== null) {
-        return '$' + amount;
+        //return '$' + amount;
+        return amount + ' OMR';
     }
-    return '';
+    return defaultValue;
 }
 
 export const printWithDefault = (value, defaultValue = '-') => {
@@ -376,4 +378,23 @@ export const formatUnderscoredTxt = (txt) => {
     })
     txt = CapitalizedWords.join(' ')
     return txt;
+}
+
+export const formatToInputDate = (date = null) => {
+    if (date == null) {
+        date = new Date();
+    }
+    date = new Date(date);
+    return date.toISOString().slice(0, 10);
+}
+
+export const getObjectValue = (value, defaultValue = null) => {
+    if (value !== '' && value !== undefined && value !== 'undefined' && value !== null) {
+        return value;
+    }
+    return defaultValue;
+}
+
+export const printCamelCaseText = (text) => {
+    return text;
 }

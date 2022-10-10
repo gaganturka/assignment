@@ -1,47 +1,49 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../Context/AuthContext";
+import React, {useContext, useEffect, useState} from "react";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {AuthContext} from "../Context/AuthContext";
 
 const Sidebar = (props) => {
-  const history = useNavigate();
-  const location = useLocation();
+    const history = useNavigate();
+    const location = useLocation();
 
-  const [toggleButton, setToggleButton] = useState(false);
-  const [active, setActive] = useState(false);
+    const [toggleButton, setToggleButton] = useState(false);
+    const [active, setActive] = useState(false);
 
-  const [sideBarVisible, setSideBarVisible] = useState(false);
+    const [sideBarVisible, setSideBarVisible] = useState(false);
 
-  const { authState, authDispatch } = useContext(AuthContext);
+    const {authState, authDispatch} = useContext(AuthContext);
 
-  useEffect(() => {}, [active]);
+    useEffect(() => {
+    }, [active]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    authDispatch({ type: "REMOVE_USER" });
-    history("/");
-  };
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        authDispatch({type: "REMOVE_USER"});
+        history("/");
+    };
 
-  const toggleActiveClass = (event) => {
-    let target = event.target;
-    let mainLi = target.parentNode;
-    console.log(target);
-    let collapseMenu = mainLi.querySelector(".collapse");
-    if (mainLi.classList.contains("active")) {
-      mainLi.classList.remove("active");
-      collapseMenu.classList.remove("show");
-    } else {
-      mainLi.classList.add("active");
-      collapseMenu.classList.add("show");
-    }
-  };
+    const toggleActiveClass = (event) => {
+        let target = event.target;
+        let mainLi = target.parentNode;
+        console.log(target);
+        let collapseMenu = mainLi.querySelector(".collapse");
+        if (mainLi.classList.contains("active")) {
+            mainLi.classList.remove("active");
+            collapseMenu.classList.remove("show");
+        } else {
+            mainLi.classList.add("active");
+            collapseMenu.classList.add("show");
+        }
+    };
 
-  const activeClass = (routesToMatch, activeClass = "active") => {
-    if (routesToMatch.includes(location.pathname)) {
-      return activeClass;
-    }
-    return "";
-  };
+    const activeClass = (routesToMatch, activeClass = "active") => {
+        if (routesToMatch.includes(location.pathname)) {
+            return activeClass;
+        }
+        return "";
+    };
+
 
   return (
     <>
@@ -432,6 +434,7 @@ const Sidebar = (props) => {
       </div>
     </>
   );
+
 };
 
 export default Sidebar;
