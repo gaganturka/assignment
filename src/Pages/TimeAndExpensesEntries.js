@@ -33,7 +33,7 @@ export const TimeAndExpensesEntries = () => {
     const navigate = useNavigate()
     useEffect(() => {
         if (modelFields == 'timeEntry' || modelFields === '') {
-            console.log("fetch time Entry" );
+            console.log("fetch time Entry");
             fetchData();
         } else {
             console.log("fetch expense Entry");
@@ -44,14 +44,14 @@ export const TimeAndExpensesEntries = () => {
     const fetchData = async (pageNumber = 1) => {
         let data = await timeExpenseActions.viewAllEntries({ description, startingDate, endDate, page: pageNumber, })
         // setAllEnteries(data)
-        console.log('time Data',data.docs);
+        console.log('time Data', data.docs);
 
         setPaginationData(data)
     }
 
     const fetchExpenseData = async (pageNumber = 1) => {
-        let data = await timeExpenseActions.getAllExpenseEntries({  description, startingDate, endDate,page: pageNumber })
-console.log('expense Data',data.docs);
+        let data = await timeExpenseActions.getAllExpenseEntries({ description, startingDate, endDate, page: pageNumber })
+        console.log('expense Data', data.docs);
         setPaginationData(data)
     }
 
@@ -62,7 +62,7 @@ console.log('expense Data',data.docs);
         navigate(`${value._id}/edit`)
     })
 
-    const updateExpense =((value)=> {
+    const updateExpense = ((value) => {
         navigate(`${value._id}/editexpense`)
     })
 
@@ -79,8 +79,8 @@ console.log('expense Data',data.docs);
     }
     const handelFilter = () => {
         if (modelFields == 'timeEntry' || modelFields === '') {
-        fetchData();
-        } else{
+            fetchData();
+        } else {
             fetchExpenseData()
         }
     }
@@ -155,7 +155,7 @@ console.log('expense Data',data.docs);
 
                             <div className="col-lg">
                                 <label htmlFor="" >Time/Expense</label>
-                                <select name="rateType"  id="rateType" type="text" className="form-control"
+                                <select name="rateType" id="rateType" type="text" className="form-control"
                                     placeholder="select"
                                     // value={modelFields.rateType}
                                     onChange={(e) => handelChange(e.target.value)}
@@ -254,7 +254,7 @@ console.log('expense Data',data.docs);
                                                                         <td>
                                                                             {item.rate}
                                                                         </td>
-                                                                    </> 
+                                                                    </>
                                                                     :
                                                                     <>
                                                                         <td>
@@ -272,14 +272,14 @@ console.log('expense Data',data.docs);
                                                                 <td>
                                                                     <div className="action-btn-group">
                                                                         {/* <a href="add-time-entry.html"> */}
-                                                                        { modelFields == 'timeEntry' || modelFields === '' ?
-                                                                        <button onClick={() => update(item)} className="btn black-fill" type="button">Edit
-                                                                        </button>
-                                                                        :
-                                                                        <button onClick={() => updateExpense(item)} className="btn black-fill" type="button">Edit
-                                                                        </button>
+                                                                        {modelFields == 'timeEntry' || modelFields === '' ?
+                                                                            <button onClick={() => update(item)} className="btn black-fill" type="button">Edit
+                                                                            </button>
+                                                                            :
+                                                                            <button onClick={() => updateExpense(item)} className="btn black-fill" type="button">Edit
+                                                                            </button>
 
-}
+                                                                        }
                                                                         {/* </a> */}
                                                                         {/* <button className="btn black-fill" type="button"><img
                                                                             src="/assets/img/eye-icon-black.png" alt="" />
