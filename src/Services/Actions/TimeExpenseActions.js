@@ -30,8 +30,8 @@ export const updateTimeEntry = (id, values) => {
 }
 
 export const getAllExpenseEntries = (params = {}) => {
-    params['page'] = 1;
-    params['limit'] = 1000;
+    // params['page'] = 1;
+    // params['limit'] = 1000;
     return http.get('/firm/case-expense-entries', params)
 }
 

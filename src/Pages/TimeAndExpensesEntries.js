@@ -32,12 +32,11 @@ export const TimeAndExpensesEntries = () => {
 
     const navigate = useNavigate()
     useEffect(() => {
-        console.log("modelFields  ->   " + modelFields);
         if (modelFields == 'timeEntry' || modelFields === '') {
-            console.log("fetch time");
+            console.log("fetch time Entry" );
             fetchData();
         } else {
-            console.log("fetch expense");
+            console.log("fetch expense Entry");
             fetchExpenseData();
         }
     }, [re, modelFields]); // Or [] if effect doesn't need props or state
@@ -45,27 +44,25 @@ export const TimeAndExpensesEntries = () => {
     const fetchData = async (pageNumber = 1) => {
         let data = await timeExpenseActions.viewAllEntries({ description, startingDate, endDate, page: pageNumber, })
         // setAllEnteries(data)
-        console.log('expenseeee', data);
+        console.log('time Data',data.docs);
 
         setPaginationData(data)
     }
 
     const fetchExpenseData = async (pageNumber = 1) => {
         let data = await timeExpenseActions.getAllExpenseEntries({  description, startingDate, endDate,page: pageNumber })
-        console.log('expense', data);
+console.log('expense Data',data.docs);
         setPaginationData(data)
     }
 
 
 
     const update = ((value) => {
-        console.log('valueeeeeeeeee', value);
         // setUpdateEntery(value)
         navigate(`${value._id}/edit`)
     })
 
     const updateExpense =((value)=> {
-        console.log('vaaaaalue', value);
         navigate(`${value._id}/editexpense`)
     })
 
@@ -81,39 +78,38 @@ export const TimeAndExpensesEntries = () => {
         setendDate(e.target.value)
     }
     const handelFilter = () => {
+        if (modelFields == 'timeEntry' || modelFields === '') {
         fetchData();
-
+        } else{
+            fetchExpenseData()
+        }
     }
 
     const handelClear = (e) => {
         setDescription('')
         setStartingDate('')
         setendDate('')
-        setRe('true')
+        setRe(paginationData)
 
     }
 
     const handlePageClick = (data) => {
-        console.log(data);
         let current = data.selected + 1;
         fetchData(current);
     };
 
     const handelChange = (e) => {
         setModelFields(e)
-        console.log('dfsdfsdfsfdfds', modelFields);
     }
 
     // console.log('filter', description, startingDate, endDate);
 
-    console.log('all', allEnteries)
-    console.log('dsasdasdasdasdas', modelFields);
 
 
     return (
         <>
             {
-                console.log('value in return', description, startingDate, endDate)
+                // console.log('value in return', description, startingDate, endDate)
             }
             <section className="admin-wrapper">
                 <div className="admin-content-wrapper">
@@ -164,9 +160,9 @@ export const TimeAndExpensesEntries = () => {
                                     // value={modelFields.rateType}
                                     onChange={(e) => handelChange(e.target.value)}
                                 >
-                                    <option value="">Choose here</option>
-                                    <option value="ExpenseEntry" >ExpenseEntry</option>
                                     <option value="timeEntry">TimeEntry</option>
+                                    <option value="ExpenseEntry" >ExpenseEntry</option>
+
                                 </select>
                             </div>
 

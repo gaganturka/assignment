@@ -54,17 +54,7 @@ export const ExpensesEntries = (props) => {
     const [selectedActivityType, setSelectedActivityType] = useState(null);
     // const [change, setChange] = useState('')
     // console.log('uuuuuuuuuu',updateEntry);
-    const [modelFields, setModelFields] = useState({
-        // firmCaseId: updateEntry.firmCaseId ? updateEntry.firmCaseId : "",
-        // firmCaseEmployeeId: updateEntry.firmCaseEmployeeId ? updateEntry.firmCaseEmployeeId : "",
-        // firmActivityTypeId: updateEntry.firmActivityTypeId ? updateEntry.firmActivityTypeId : "",
-        // isBillable: updateEntry.isBillable ? updateEntry.isBillable : "",
-        // description: updateEntry.description ? updateEntry.description : "",
-        // date: updateEntry.date ? updateEntry.date.split('T')[0] : "",
-        // rate: updateEntry.rate ? updateEntry.rate : "",
-        // duration: updateEntry.duration ? updateEntry.duration : "",
-        // rateType: updateEntry.rateType ? updateEntry.rateType : "",
-    });
+    const [modelFields, setModelFields] = useState({});
     // if (Object.keys(updateEntry) > 0) {
     //     modelFields.firmCaseId = updateEntry.firmCaseId
     //     modelFields.firmCaseEmployeeId = updateEntry.firmCaseEmployeeId
@@ -97,7 +87,6 @@ export const ExpensesEntries = (props) => {
         isBillable: Joi.required(),
         description: Joi.required(),
         cost: Joi.required(),
-        // rateType: Joi.required(),
     };
 
     const updateModelFieldValue = (name, value) => {
@@ -288,7 +277,7 @@ export const ExpensesEntries = (props) => {
                             <div className="col-lg-6">
                                 <div className="">
                                     <div className="admin-title-flex">
-                                        <h3>{modelId ? 'Update Time Entry' : 'Add Expense Entry'}</h3>
+                                        <h3>{modelId ? 'Update Expense Entry' : 'Add Expense Entry'}</h3>
                                     </div>
                                 </div>
                             </div>
