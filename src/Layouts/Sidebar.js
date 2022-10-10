@@ -1,47 +1,49 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../Context/AuthContext";
+import React, {useContext, useEffect, useState} from "react";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {AuthContext} from "../Context/AuthContext";
 
 const Sidebar = (props) => {
-  const history = useNavigate();
-  const location = useLocation();
+    const history = useNavigate();
+    const location = useLocation();
 
-  const [toggleButton, setToggleButton] = useState(false);
-  const [active, setActive] = useState(false);
+    const [toggleButton, setToggleButton] = useState(false);
+    const [active, setActive] = useState(false);
 
-  const [sideBarVisible, setSideBarVisible] = useState(false);
+    const [sideBarVisible, setSideBarVisible] = useState(false);
 
-  const { authState, authDispatch } = useContext(AuthContext);
+    const {authState, authDispatch} = useContext(AuthContext);
 
-  useEffect(() => {}, [active]);
+    useEffect(() => {
+    }, [active]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    authDispatch({ type: "REMOVE_USER" });
-    history("/");
-  };
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        authDispatch({type: "REMOVE_USER"});
+        history("/");
+    };
 
-  const toggleActiveClass = (event) => {
-    let target = event.target;
-    let mainLi = target.parentNode;
-    console.log(target);
-    let collapseMenu = mainLi.querySelector(".collapse");
-    if (mainLi.classList.contains("active")) {
-      mainLi.classList.remove("active");
-      collapseMenu.classList.remove("show");
-    } else {
-      mainLi.classList.add("active");
-      collapseMenu.classList.add("show");
-    }
-  };
+    const toggleActiveClass = (event) => {
+        let target = event.target;
+        let mainLi = target.parentNode;
+        console.log(target);
+        let collapseMenu = mainLi.querySelector(".collapse");
+        if (mainLi.classList.contains("active")) {
+            mainLi.classList.remove("active");
+            collapseMenu.classList.remove("show");
+        } else {
+            mainLi.classList.add("active");
+            collapseMenu.classList.add("show");
+        }
+    };
 
-  const activeClass = (routesToMatch, activeClass = "active") => {
-    if (routesToMatch.includes(location.pathname)) {
-      return activeClass;
-    }
-    return "";
-  };
+    const activeClass = (routesToMatch, activeClass = "active") => {
+        if (routesToMatch.includes(location.pathname)) {
+            return activeClass;
+        }
+        return "";
+    };
+
 
   return (
     <>
@@ -198,8 +200,8 @@ const Sidebar = (props) => {
                   [
                     "/viewInvoices",
                     "/addInvoice",
-                    "/viewRequestedFunds",
-                    "/addRequestFund",
+                    "/view-requested-funds",
+                    "/add-request-fund",
                     "/statement",
                   ],
                   "show"
@@ -216,16 +218,16 @@ const Sidebar = (props) => {
                       Add new Invoice
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/viewRequestedFunds"])}`}>
+                  <li className={`${activeClass(["/view-requested-funds"])}`}>
                     <Link
-                      to="/viewRequestedFunds"
+                      to="/view-requested-funds"
                       className="link-dark rounded"
                     >
                       View Requested Funds
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addRequestFund"])}`}>
-                    <Link to="/addRequestFund" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-request-fund"])}`}>
+                    <Link to="/add-request-fund" className="link-dark rounded">
                       Add new Request fund
                     </Link>
                   </li>
@@ -251,7 +253,7 @@ const Sidebar = (props) => {
               </button>
               <div
                 className={`collapse ${activeClass(
-                  ["/events", "/addEvent", "/addLocation", "/manageLocation"],
+                  ["/events", "/add-event"],
                   "show"
                 )}`}
               >
@@ -261,21 +263,21 @@ const Sidebar = (props) => {
                       Events
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addEvent"])}`}>
-                    <Link to="/addEvent" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-event"])}`}>
+                    <Link to="/add-event" className="link-dark rounded">
                       Add Event
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/manageLocation"])}`}>
+                  {/* <li className={`${activeClass(["/manageLocation"])}`}>
                     <Link to="/manageLocation" className="link-dark rounded">
                       Manage Location
                     </Link>
-                  </li>
-                  <li className={`${activeClass(["/addLocation"])}`}>
+                  </li> */}
+                  {/* <li className={`${activeClass(["/addLocation"])}`}>
                     <Link to="/addLocation" className="link-dark rounded">
                       Add Location
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </li>
@@ -302,33 +304,33 @@ const Sidebar = (props) => {
               <div
                 className={`collapse ${activeClass(
                   [
-                    "/manageEmployee",
-                    "/addEmployee",
-                    "/manageRole",
-                    "/addRole",
+                    "/manage-employee",
+                    "/add-employee",
+                    "/manage-role",
+                    "/add-role",
                     "/manageSalaries",
                   ],
                   "show"
                 )}`}
               >
                 <ul className="btn-toggle-nav">
-                  <li className={`${activeClass(["/manageEmployee"])}`}>
-                    <Link to="/manageEmployee" className="link-dark rounded">
+                  <li className={`${activeClass(["/manage-employee"])}`}>
+                    <Link to="/manage-employee" className="link-dark rounded">
                       Manage Employee
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addEmployee"])}`}>
-                    <Link to="/addEmployee" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-employee"])}`}>
+                    <Link to="/add-employee" className="link-dark rounded">
                       Add Employee
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/manageRole"])}`}>
-                    <Link to="/manageRole" className="link-dark rounded">
+                  <li className={`${activeClass(["/manage-role"])}`}>
+                    <Link to="/manage-role" className="link-dark rounded">
                       Manage Role
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addRole"])}`}>
-                    <Link to="/addRole" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-role"])}`}>
+                    <Link to="/add-role" className="link-dark rounded">
                       Add Role
                     </Link>
                   </li>
@@ -367,6 +369,8 @@ const Sidebar = (props) => {
                     "/contact-groups",
                     "/case-stages",
                     "/practice-areas",
+                    "/manage-location",
+                    "/manage-bank-account"
                   ],
                   "show"
                 )}`}
@@ -391,6 +395,16 @@ const Sidebar = (props) => {
                   <li className={`${activeClass(["/practice-areas"])}`}>
                     <Link to="/practice-areas" className="link-dark rounded">
                       Practice Areas
+                    </Link>
+                  </li>
+                  <li className={`${activeClass(["/manage-location"])}`}>
+                    <Link to="/manage-location" className="link-dark rounded">
+                      Manage Location
+                    </Link>
+                  </li>
+                  <li className={`${activeClass(["/manage-bank-account"])}`}>
+                    <Link to="/manage-bank-account" className="link-dark rounded">
+                      Bank Account
                     </Link>
                   </li>
                 </ul>
@@ -420,6 +434,7 @@ const Sidebar = (props) => {
       </div>
     </>
   );
+
 };
 
 export default Sidebar;

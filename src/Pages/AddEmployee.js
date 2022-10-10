@@ -6,8 +6,8 @@ import { CustomSelect } from "../Componenets/CustomSelect";
 import FieldError from "../Componenets/FieldError";
 import * as commonActions from "../Services/Actions/CommonActions";
 import { ToastContainer, toast } from "react-toastify";
-import employeeActions from "../Services/Actions/EmployeeActions"
-import {Link, useNavigate, useParams} from "react-router-dom";
+import employeeActions from "../Services/Actions/EmployeeActions";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   closeModal,
   formatDate,
@@ -23,9 +23,8 @@ import * as Joi from "joi-browser";
 import Creatable from "react-select/creatable";
 import * as roleActions from "../Services/Actions/RoleActions";
 
-
 const AddEmployee = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
   //State VAriables
   const [firstName, setFirstName] = useState("");
@@ -51,12 +50,20 @@ const AddEmployee = () => {
   const [employeeRoles, setEmployeeRoles] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log('COUNTRIES = ', countries);
-
   const schema = {
     firstName: Joi.string().min(3).required(),
     lastName: Joi.string().min(3).required(),
-    email: Joi.string().email().required()
+    email: Joi.string().email().required(),
+    ratePerHour: Joi.string().required(),
+    dateOfBirth: Joi.string().required(),
+    streetNo: Joi.string().required(),
+    area: Joi.string().required(),
+    country: Joi.string().required(),
+    state: Joi.string().required(),
+    city: Joi.string().required(),
+    zipcode: Joi.string().required(),
+    firmEmployeeRoleId: Joi.string().hex().length(24).required(),
+    firmEmployeeTypeId: Joi.string().hex().length(24).required(),
   };
 
   useEffect(() => {
@@ -66,36 +73,37 @@ const AddEmployee = () => {
   }, []);
 
   const getEmployeeRoles = () => {
-    roleActions.getRolesOptions()
-    .then((res) => {
+    roleActions
+      .getRolesOptions()
+      .then((res) => {
         setRolesOptions(res);
-    })
-    .catch(err => {
+      })
+      .catch((err) => {
         toast("Failed to load");
-
-    })
-  }
+      });
+  };
 
   const getEmployeeTypes = () => {
-    roleActions.getEmployeeTypes()
-    .then((res) => {
+    roleActions
+      .getEmployeeTypes()
+      .then((res) => {
         setEmployeeTypeOptions(res);
-    })
-    .catch(err => {
+      })
+      .catch((err) => {
         toast("Failed to load");
-    })
-  }
+      });
+  };
 
   const handleRoleChange = (event) => {
     setSelectedRoles(event);
-    updateModelFieldValue('firmEmployeeRoleId', event);
-  }
+    updateModelFieldValue("firmEmployeeRoleId", event);
+  };
 
   const handleTypeChange = (event) => {
     setSelectedEmployeeTypes(event);
-    updateModelFieldValue('firmEmployeeTypeId', event);
-  }
-   
+    updateModelFieldValue("firmEmployeeTypeId", event);
+  };
+
   const updateModelFieldValue = (name, value) => {
     modelFields[name] = value;
   };
@@ -155,7 +163,6 @@ const AddEmployee = () => {
     commonActions
       .cities(modelFields.countryCode, modelFields.stateCode)
       .then((res) => {
-        console.log('CITY RESPONSE == ', res)
         let citiesData = [];
         for (let city of res) {
           citiesData.push({
@@ -171,30 +178,29 @@ const AddEmployee = () => {
       });
   };
 
-//   const updateModelFieldValue = (name, value) => {
-//     switch (name) {
-//         case 'clients':
-//             if (value.length <= 0) {
-//                 value = undefined;
-//             }
-//             break;
-//         case 'employees':
-//             if (Object.keys(value).length <= 0) {
-//                 value = undefined;
-//             }
-//             break;
-//     }
-//     if (value === undefined) {
-//         if (modelFields.hasOwnProperty(name)) {
-//             delete modelFields[name];
-//         }
-//     } else {
-//         modelFields[name] = value;
-//     }
-// }
+  //   const updateModelFieldValue = (name, value) => {
+  //     switch (name) {
+  //         case 'clients':
+  //             if (value.length <= 0) {
+  //                 value = undefined;
+  //             }
+  //             break;
+  //         case 'employees':
+  //             if (Object.keys(value).length <= 0) {
+  //                 value = undefined;
+  //             }
+  //             break;
+  //     }
+  //     if (value === undefined) {
+  //         if (modelFields.hasOwnProperty(name)) {
+  //             delete modelFields[name];
+  //         }
+  //     } else {
+  //         modelFields[name] = value;
+  //     }
+  // }
 
   const handleCountryChange = async (event) => {
-    console.log('EVENTT == ', event);
     updateModelFieldValue("countryCode", event.value);
     updateModelFieldValue("country", event.label);
     setSelectedCountry(event);
@@ -204,7 +210,6 @@ const AddEmployee = () => {
   };
 
   const handleStateChange = async (event) => {
-    console.log('STATE EVENTT == ', event);
     updateModelFieldValue("stateCode", event.value);
     updateModelFieldValue("state", event.label);
     setSelectedState(event);
@@ -214,8 +219,6 @@ const AddEmployee = () => {
   };
 
   const handleCityChange = async (event) => {
-    console.log('CITY EVENTT == ', event);
-
     setSelectedCity(event);
     updateModelFieldValue("city", event.label);
   };
@@ -230,48 +233,30 @@ const AddEmployee = () => {
     event.preventDefault();
     setLoading(true);
     let errors = validateJOIFormField(modelFields, schema);
-        if (errors == null) {
-            console.log('MODAL fIELDS = ', modelFields)
-            let updatedModelFields = {
-                area: modelFields.area,
-                streetNo: modelFields.streetNo,
-                city: modelFields.city,
-                country: modelFields.country,
-                state: modelFields.state,
-                dateOfBirth: modelFields.dateOfBirth,
-                email: modelFields.email,
-                firmEmployeeRoleId: modelFields.firmEmployeeRoleId,
-                firmEmployeeTypeId: modelFields.firmEmployeeTypeId,
-                firstName: modelFields.firstName,
-                lastName: modelFields.lastName,
-                ratePerHour: modelFields.ratePerHour,
-                streetNo: modelFields.streetNo,
-                zipcode: modelFields.zipcode
-            }
-            // showLoading();
-            employeeActions.create(updatedModelFields)
-                .then((res) => {
-                    toast('Employee has been saved');
-                    hideLoading();
-                    navigate('/manageEmployee');
-                })
-                .catch((error) => {
-                    handleRequestError(error);
-                    hideLoading();
-                })
-        }else {
-            for (let error in errors) {
-                toast(errors[error]);
-            }
-            setErrors(errors);
-            hideLoading();
-        }
-        setLoading(false);
-  }
+    if (errors == null) {
+      delete modelFields.countryCode;
+      delete modelFields.stateCode;
+      employeeActions
+        .create(modelFields)
+        .then((res) => {
+          toast("Employee has been saved");
+          hideLoading();
+          navigate("/manage-employee");
+        })
+        .catch((error) => {
+          handleRequestError(error);
+          hideLoading();
+        });
+    } else {
+      setErrors(errors);
+      hideLoading();
+    }
+    setLoading(false);
+  };
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       {loading ? (
         <div className="custm-loader">
           <TailSpin color="#000" height={200} width={200} />
@@ -315,6 +300,7 @@ const AddEmployee = () => {
                               value={modelFields.firstName || ""}
                               onChange={handleChange}
                             />
+                            <FieldError error={errors.firstName} />
                           </div>
                         </div>
 
@@ -328,6 +314,7 @@ const AddEmployee = () => {
                               value={modelFields.lastName || ""}
                               onChange={handleChange}
                             />
+                            <FieldError error={errors.lastName} />
                           </div>
                         </div>
                       </div>
@@ -348,11 +335,11 @@ const AddEmployee = () => {
                               value={modelFields.email || ""}
                               onChange={handleChange}
                             />
+                            <FieldError error={errors.email} />
                           </div>
                         </div>
                       </div>
                     </div>
-
 
                     <div className="form-fields-row">
                       <div className="row">
@@ -369,11 +356,11 @@ const AddEmployee = () => {
                               value={modelFields.ratePerHour || ""}
                               onChange={handleChange}
                             />
+                            <FieldError error={errors.ratePerHour} />
                           </div>
                         </div>
                       </div>
                     </div>
-
 
                     <div className="form-fields-row">
                       <div className="row">
@@ -528,7 +515,7 @@ const AddEmployee = () => {
                               onChange={handleChange}
                               placeholder="Zipcode"
                             />
-                            <FieldError error={errors.zipCode} />
+                            <FieldError error={errors.zipcode} />
                           </div>
                         </div>
                       </div>
@@ -554,6 +541,7 @@ const AddEmployee = () => {
                             value={selectRoles}
                             options={rolesOptions}
                           />
+                          <FieldError error={errors.firmEmployeeRoleId} />
                         </div>
                       </div>
                     </div>
@@ -570,7 +558,7 @@ const AddEmployee = () => {
                       </div>
                       <div className="col-lg-3">
                         <div className="form-group">
-                        <CustomSelect
+                          <CustomSelect
                             isMulti={false}
                             placeholder="Select Type"
                             isClearable={true}
@@ -578,6 +566,7 @@ const AddEmployee = () => {
                             value={selectEmployee}
                             options={employeeTypeOptions}
                           />
+                          <FieldError error={errors.firmEmployeeTypeId} />
                         </div>
                       </div>
                     </div>
@@ -587,7 +576,11 @@ const AddEmployee = () => {
                     <div className="row">
                       <div className="col-lg-3"></div>
                       <div className="col-lg-3">
-                        <button className="btn btn-grey-common" type="submit" onClick={submit}>
+                        <button
+                          className="btn btn-grey-common"
+                          type="submit"
+                          onClick={submit}
+                        >
                           Add Employee
                         </button>
                       </div>

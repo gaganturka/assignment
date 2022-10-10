@@ -6,7 +6,8 @@ import * as locationActions from "../Services/Actions/LocationActions";
 import * as eventActions from "../Services/Actions/EventActions";
 import { Link, resolvePath, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import {LocationFormModal} from "../Componenets/LocationFormModal";
+import { LocationFormModal } from "../Componenets/LocationFormModal";
+import FieldError from "../Componenets/FieldError";
 
 import Select from "react-select";
 import {
@@ -19,9 +20,9 @@ import {
   showLoading,
   validateJOIFormField,
   validateJOIProperty,
+  repeatOptions,
 } from "../Utils/Helpers";
 import * as Joi from "joi-browser";
-import { FirmLocationFormModal } from "../Componenets/LocationFormModal";
 import { array } from "joi";
 
 const AddEvent = () => {
@@ -39,7 +40,7 @@ const AddEvent = () => {
     repeatType: "",
     repeatDuration: 1,
     days: [],
-    repeatEndedOn: null
+    repeatEndedOn: null,
   });
   const [errors, setErrors] = useState({});
   const [model, setModel] = useState(null);
@@ -52,15 +53,7 @@ const AddEvent = () => {
   const [selectEventRepeat, setSelectEventRepeat] = useState(null);
   const [days, setDays] = useState([]);
   const [openModel, setOpenModel] = useState(false);
-
-  const eventRepeatOptions = [
-    { label: "Daily", value: "Daily" },
-    { label: "Weekly", value: "Weekly" },
-    { label: "Monthly", value: "Monthly" },
-    { label: "Yearly", value: "Yearly" },
-  ];
-
-  console.log("MODEL FIELDS = ", modelFields);
+  const [eventRepeatOptions, setEventRepeatOptions] = useState([]);
 
   const history = useNavigate();
 
@@ -68,6 +61,7 @@ const AddEvent = () => {
     getAllCases();
     getAllFirmEmployees();
     getLocations();
+    setEventRepeatOptions(repeatOptions);
   }, []);
 
   useEffect(() => {
@@ -83,18 +77,24 @@ const AddEvent = () => {
 
   useEffect(() => {
     modelFields.days = days;
-  }, [days])
+  }, [days]);
 
   useEffect(() => {
-    if(disable) {
-        if(modelFields.caseId) {
-            delete modelFields.caseId;
-        }
+    if (disable) {
+      if (modelFields.caseId) {
+        delete modelFields.caseId;
+      }
     }
-  }, [disable])
+  }, [disable]);
 
   const schema = {
     eventName: Joi.string().min(3).required(),
+    startDate: Joi.string().required(),
+    endDate: Joi.string().required(),
+    startTime: Joi.string().required(),
+    endTime: Joi.string().required(),
+    location: Joi.string().hex().length(24).required(),
+    description: Joi.string().required(),
   };
 
   const getAllCases = () => {
@@ -140,7 +140,7 @@ const AddEvent = () => {
       .get()
       .then((res) => {
         let locationData = [];
-        for (let location of res) {
+        for (let location of res.docs) {
           locationData.push({
             label: location.name,
             value: location._id,
@@ -168,9 +168,8 @@ const AddEvent = () => {
 
   const handleNoEndDate = (event) => {
     setNoEndDateDisable(!noEndDateDisable);
-    updateModelFieldValue('repeatEndedOn', null);
-  }
-
+    updateModelFieldValue("repeatEndedOn", null);
+  };
 
   const updateModelFieldValue = (name, value) => {
     modelFields[name] = value;
@@ -214,7 +213,6 @@ const AddEvent = () => {
     updateModelFieldValue("repeatType", event.label);
   };
 
-
   const handleRepeatDaysChange = (event) => {
     const isChecked = event.target.checked;
     if (isChecked) {
@@ -236,67 +234,47 @@ const AddEvent = () => {
   const submit = (event) => {
     event.preventDefault();
     setLoading(true);
-    eventActions.create(modelFields)
+    let errors = validateJOIFormField(modelFields, schema);
+    if (errors == null) {
+      eventActions
+        .create(modelFields)
         .then((res) => {
-            console.log(res);
-            toast("Event Added!");
-                setLoading(false);
-            history("/events");
+          toast("Event Added!");
+          setLoading(false);
+          history("/events");
         })
         .catch((err) => {
-            console.log(err);
-        })
-  }
+          console.log(err);
+        });
+    } else {
+      setErrors(errors);
+      setLoading(false);
+    }
+  };
 
   const openFormModal = async () => {
     // setOpenModel(true);
     openModal("locationFormModal");
-
-}
+  };
 
   const handleNew = () => {
     setModel({});
     openFormModal();
-}
+  };
 
-const formModelClosed = () => {
+  const formModelClosed = () => {
     setOpenModel(false);
-}
-
-  //   const getModels = async (pageNumber = 1) => {
-  //     showLoading();
-  //     contactGroupActions.get({
-  //         search: searchedTerm,
-  //         page: pageNumber
-  //     }).then(res => {
-  //         setPaginationData(res);
-  //         hideLoading();
-  //     }).catch(err => {
-  //         toast('Failed to load');
-  //         hideLoading();
-  //     });
-  // };
-
-  //   const formModelClosed = (thingsChanged) => {
-  //     if (thingsChanged) {
-  //         getModels();
-  //     }
-  // }
+  };
 
   return (
     <>
-        <ToastContainer />
+      <ToastContainer />
       {loading ? (
         <div className="custm-loader">
           <TailSpin color="#000" height={200} width={200} />
         </div>
       ) : null}
-      {/* {
-        openModel ?  <LocationFormModal formModel={model} onClose={formModelClosed}/> : ""
-      } */}
-
-<LocationFormModal formModel={model} /> 
-       
+      <LocationFormModal formModel={model} />
 
       {/* <FirmLocationFormModal formModel={model} onClose={formModelClosed}/> */}
       <section className="admin-wrapper">
@@ -313,11 +291,11 @@ const formModelClosed = () => {
               <div className="col-lg-6">
                 <div className="admin-short-nav-buttons">
                   <div className="table-btn-group">
-                    <a href="time-exp.html">
+                    <Link to={"/events"}>
                       <button className="btn " type="button">
                         Back
                       </button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -389,6 +367,7 @@ const formModelClosed = () => {
                               value={modelFields.eventName || ""}
                               onChange={handleChange}
                             />
+                            <FieldError error={errors.eventName} />
                           </div>
                         </div>
                       </div>
@@ -411,6 +390,7 @@ const formModelClosed = () => {
                               }
                               onChange={handleChange}
                             />
+                            <FieldError error={errors.startDate} />
                           </div>
                         </div>
 
@@ -425,6 +405,7 @@ const formModelClosed = () => {
                               onChange={handleChange}
                               disabled={allDayDisable}
                             />
+                            <FieldError error={errors.startTime} />
                           </div>
                         </div>
 
@@ -482,6 +463,7 @@ const formModelClosed = () => {
                               }
                               onChange={handleChange}
                             />
+                            <FieldError error={errors.endDate} />
                           </div>
                         </div>
 
@@ -496,6 +478,7 @@ const formModelClosed = () => {
                               onChange={handleChange}
                               disabled={allDayDisable}
                             />
+                            <FieldError error={errors.endTime} />
                           </div>
                         </div>
                       </div>
@@ -525,7 +508,8 @@ const formModelClosed = () => {
                       ""
                     )}
 
-                    {modelFields.repeatType === "Daily" && eventRepeatDisable ? (
+                    {modelFields.repeatType === "Daily" &&
+                    eventRepeatDisable ? (
                       <div className="form-fields-row">
                         <div className="row">
                           <div className="col-lg-3"></div>
@@ -552,7 +536,8 @@ const formModelClosed = () => {
                       ""
                     )}
 
-                    {modelFields.repeatType === "Weekly" && eventRepeatDisable ? (
+                    {modelFields.repeatType === "Weekly" &&
+                    eventRepeatDisable ? (
                       <div>
                         <div className="form-fields-row">
                           <div className="row">
@@ -649,7 +634,8 @@ const formModelClosed = () => {
                       ""
                     )}
 
-                    {modelFields.repeatType === "Monthly" && eventRepeatDisable ? (
+                    {modelFields.repeatType === "Monthly" &&
+                    eventRepeatDisable ? (
                       <div className="form-fields-row">
                         <div className="row">
                           <div className="col-lg-3"></div>
@@ -676,7 +662,8 @@ const formModelClosed = () => {
                       ""
                     )}
 
-                    {modelFields.repeatType === "Yearly" && eventRepeatDisable ? (
+                    {modelFields.repeatType === "Yearly" &&
+                    eventRepeatDisable ? (
                       <div className="form-fields-row">
                         <div className="row">
                           <div className="col-lg-3"></div>
@@ -703,7 +690,7 @@ const formModelClosed = () => {
                       ""
                     )}
 
-{eventRepeatDisable ? (
+                    {eventRepeatDisable ? (
                       <div className="form-fields-row">
                         <div className="row">
                           <div className="col-lg-3"></div>
@@ -720,15 +707,15 @@ const formModelClosed = () => {
                                 onChange={handleChange}
                               /> */}
                               <input
-                              type="date"
-                              name="repeatEndedOn"
-                              className="form-control"
-                              placeholder=""
-                              value={modelFields.repeatEndedOn || ""}
-                              onChange={handleChange}
-                              disabled={noEndDateDisable}
-                            />
-                            {/* <input
+                                type="date"
+                                name="repeatEndedOn"
+                                className="form-control"
+                                placeholder=""
+                                value={modelFields.repeatEndedOn || ""}
+                                onChange={handleChange}
+                                disabled={noEndDateDisable}
+                              />
+                              {/* <input
                               type="time"
                               name="endTime"
                               className="form-control"
@@ -739,14 +726,14 @@ const formModelClosed = () => {
                             /> */}
                             </div>
                             <div className="form-group">
-                            <input
-                                  type="checkbox"
-                                  name="check-1"
-                                  value=""
-                                  id="check-1"
-                                  onChange={handleNoEndDate}
-                                />
-                                <label htmlFor="check-1">No end date</label>
+                              <input
+                                type="checkbox"
+                                name="check-1"
+                                value=""
+                                id="check-1"
+                                onChange={handleNoEndDate}
+                              />
+                              <label htmlFor="check-1">No end date</label>
                             </div>
                           </div>
                         </div>
@@ -767,6 +754,7 @@ const formModelClosed = () => {
                               options={locations}
                               onChange={handleLocationChange}
                             />
+                            <FieldError error={errors.location} />
                           </div>
                         </div>
                         <div className="col-lg-2">
@@ -774,11 +762,12 @@ const formModelClosed = () => {
                             Add new location
                           </Link> */}
                           <button
-                                            onClick={handleNew}
-                                            className="btn black-fill"
-                                            type="button">
-                                            Add New Location
-                                        </button>
+                            onClick={handleNew}
+                            className="btn black-fill"
+                            type="button"
+                          >
+                            Add New Location
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -801,6 +790,7 @@ const formModelClosed = () => {
                               onChange={handleChange}
                             ></textarea>
                             <small>Description will appear on invoice</small>
+                            <FieldError error={errors.description} />
                           </div>
                         </div>
                       </div>
@@ -822,7 +812,11 @@ const formModelClosed = () => {
                     <div className="row">
                       <div className="col-lg-3"></div>
                       <div className="col-lg-3">
-                        <button className="btn btn-grey-common" type="submit" onClick={submit}>
+                        <button
+                          className="btn btn-grey-common"
+                          type="submit"
+                          onClick={submit}
+                        >
                           Save event
                         </button>
                       </div>
