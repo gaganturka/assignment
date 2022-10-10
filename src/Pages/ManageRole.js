@@ -1,4 +1,3 @@
-
 import { TailSpin } from "react-loader-spinner";
 import ReactPaginate from "react-paginate";
 import React, { useEffect, useState } from "react";
@@ -8,7 +7,7 @@ import {
   hideLoading,
   openModal,
   showLoading,
-  formatUnderscoredTxt
+  formatUnderscoredTxt,
 } from "../Utils/Helpers";
 // import { formatUnderscoredTxt } from "./../Utils/Helpers";
 
@@ -45,11 +44,9 @@ const ManageRole = (props) => {
     totalPages: 0,
   });
 
-  console.log('Roles == ', roles)
-
   useEffect(() => {
     if (localStorage.getItem("token")) {
-        getAllRoles(currentPage, searchedTerm);
+      getAllRoles(currentPage, searchedTerm);
     } else {
       navigate("/login");
     }
@@ -151,14 +148,10 @@ const ManageRole = (props) => {
               <div className="col-lg-6">
                 <div className="admin-short-nav-buttons">
                   <div className="table-btn-group">
-                    <Link to="/addRole">
-                    <button
-                      className="btn black-fill"
-                      type="button"
-                      onClick={handleNew}
-                    >
-                      Add Role
-                    </button>
+                    <Link to="/add-role">
+                      <button className="btn black-fill" type="button">
+                        Add Role
+                      </button>
                     </Link>
                   </div>
                 </div>
@@ -207,18 +200,19 @@ const ManageRole = (props) => {
                                     <h5>{group.name}</h5>
                                   </td>
                                   <td>
-                                    <h6>{group.modules.map((module) => {
-                                      return formatUnderscoredTxt(module)
-                                    }).join(", ")}</h6>
+                                    <h6>
+                                      {group.modules
+                                        .map((module) => {
+                                          return formatUnderscoredTxt(module);
+                                        })
+                                        .join(", ")}
+                                    </h6>
                                   </td>
 
                                   <td>
                                     <div className="action-btn-group">
-                                      <Link to={`/editRole/${group._id}`}>
-                                        <button
-                                          className="btn"
-                                          type="button"
-                                        >
+                                      <Link to={`/edit-role/${group._id}`}>
+                                        <button className="btn" type="button">
                                           {" "}
                                           <img
                                             src="/assets/img/edit-pencil-icon.png"

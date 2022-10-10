@@ -1,6 +1,7 @@
 import ReactPaginate from "react-paginate";
 import React, { useEffect, useMemo, useState } from "react";
 import * as locationActions from "../Services/Actions/LocationActions";
+import * as bankAccountActions from "../Services/Actions/BankAccountActions";
 import {
   formatDate,
   hideLoading,
@@ -10,8 +11,9 @@ import {
 import { toast } from "react-toastify";
 import PracticeAreaFormModal from "../Componenets/PracticeAreaFormModal";
 import { LocationFormModal } from "../Componenets/LocationFormModal";
+import { BankAccountFormModal } from "../Componenets/BankAccountFormModal";
 
-export const ManageLocation = (props) => {
+const ManageBankAccount = (props) => {
   const [paginationData, setPaginationData] = useState({
     docs: [],
     hasNextPage: false,
@@ -28,8 +30,6 @@ export const ManageLocation = (props) => {
   const [search, setSearch] = useState("");
   const [model, setModel] = useState(null);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     getModels();
   }, [searchedTerm]);
@@ -41,7 +41,7 @@ export const ManageLocation = (props) => {
 
   const getModels = async (pageNumber = 1) => {
     showLoading();
-    locationActions
+    bankAccountActions
       .get({
         search: searchedTerm,
         page: pageNumber,
@@ -61,7 +61,7 @@ export const ManageLocation = (props) => {
   };
 
   const openFormModal = async () => {
-    openModal("locationFormModal");
+    openModal("bankAccountFormModal");
   };
 
   const handleNew = () => {
@@ -69,21 +69,9 @@ export const ManageLocation = (props) => {
     openFormModal();
   };
 
-  // const handleEdit = (model) => {
-  //     showLoading();
-  //     practiceAreasActions.view(model._id).then(res => {
-  //         hideLoading();
-  //         setModel(res);
-  //         openFormModal();
-  //     }).catch(err => {
-  //         toast('Failed to load');
-  //         hideLoading();
-  //     });
-  // }
-
   const handleEdit = (model) => {
     showLoading();
-    locationActions
+    bankAccountActions
       .view(model._id)
       .then((res) => {
         hideLoading();
@@ -104,8 +92,7 @@ export const ManageLocation = (props) => {
 
   return (
     <>
-      {/* <PracticeAreaFormModal formModel={model} onClose={formModelClosed}/> */}
-      <LocationFormModal formModel={model} onClose={formModelClosed} />
+      <BankAccountFormModal formModel={model} onClose={formModelClosed} />
       <section className="admin-wrapper">
         <div className="admin-content-wrapper">
           <div className="admin-title-header mt-0">
@@ -113,7 +100,7 @@ export const ManageLocation = (props) => {
               <div className="col-lg-6">
                 <div className="">
                   <div className="admin-title-flex">
-                    <h3>Manage Locations</h3>
+                    <h3>Manage Bank Accounts</h3>
                   </div>
                 </div>
               </div>
@@ -162,7 +149,9 @@ export const ManageLocation = (props) => {
                         <table className="table">
                           <thead>
                             <tr>
-                              <th>Name</th>
+                              <th>Account Holder</th>
+                              <th>Account Number</th>
+                              <th>Bank</th>
                               <th>Address</th>
                               <th>State</th>
                               <th>City</th>
@@ -175,11 +164,18 @@ export const ManageLocation = (props) => {
                               return (
                                 <tr key={i}>
                                   <td>
-                                    <h5>{model.name}</h5>
+                                    <h5>{model.accountHolder}</h5>
                                   </td>
                                   <td>
-                                    <h6>{model.address1}</h6>
+                                    <h6>{model.accountNumber}</h6>
                                   </td>
+                                  <td>
+                                    <h6>{model.bank}</h6>
+                                  </td>
+                                  <td>
+                                    <h6>{model.address}</h6>
+                                  </td>
+
                                   <td>
                                     <h6>{model.state}</h6>
                                   </td>
@@ -248,3 +244,5 @@ export const ManageLocation = (props) => {
     </>
   );
 };
+
+export default ManageBankAccount;

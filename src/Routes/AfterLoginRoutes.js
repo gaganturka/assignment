@@ -11,6 +11,7 @@ import Statement from "../Pages/Statement";
 import Events from "../Pages/Events";
 import AddEvent from "../Pages/AddEvent";
 import ManageEmployee from "../Pages/ManageEmployee";
+import ManageBankAccount from "../Pages/ManageBankAccount";
 import AddEmployee from "../Pages/AddEmployee";
 import ManageRole from "../Pages/ManageRole";
 import AddRole from "../Pages/AddRole";
@@ -50,8 +51,8 @@ const afterLoginRoutes = (
 
         <Route
             exact
-            path="/manageLocation"
-            key="manageLocation"
+            path="/manage-location"
+            key="manage-location"
             element={<ManageLocation/>}
         />
 
@@ -147,14 +148,20 @@ const afterLoginRoutes = (
         />
         <Route
             exact
-            path="/viewRequestedFunds"
-            key="viewRequestedFunds"
+            path="/view-requested-funds"
+            key="view-requested-funds"
             element={<ViewRequestedFunds/>}
         />
         <Route
             exact
-            path="/addRequestFund"
-            key="addRequestFund"
+            path="/add-request-fund"
+            key="add-request-fund"
+            element={<AddRequestFund/>}
+        />
+          <Route
+            exact
+            path="edit-request-fund/:requestFundId"
+            key="/edit-request-fund"
             element={<AddRequestFund/>}
         />
         <Route
@@ -168,36 +175,42 @@ const afterLoginRoutes = (
 
         <Route
             exact
-            path="/addEvent"
-            key="addEvent"
+            path="/add-event"
+            key="add-event"
             element={<AddEvent/>}
         />
         <Route
             exact
-            path="/manageEmployee"
-            key="manageEmployee"
+            path="/manage-employee"
+            key="manage-employee"
             element={<ManageEmployee/>}
         />
         <Route
             exact
-            path="/addEmployee"
-            key="addEmployee"
+            path="/manage-bank-account"
+            key="manage-bank-account"
+            element={<ManageBankAccount/>}
+        />
+        <Route
+            exact
+            path="/add-employee"
+            key="add-employee"
             element={<AddEmployee/>}
         />
         <Route
             exact
-            path="/editEmployee/:employeeId"
-            key="editEmployee"
+            path="/edit-employee/:employeeId"
+            key="edit-employee"
             element={<EditEmployee/>}
         />
         <Route
             exact
-            path="/manageRole"
-            key="manageRole"
+            path="/manage-role"
+            key="manage-role"
             element={<ManageRole/>}
         />
-        <Route exact path="/addRole" key="addRole" element={<AddRole/>}/>
-        <Route exact path="/editRole/:roleId" key="addRole" element={<AddRole/>}/>
+        <Route exact path="/add-role" key="add-role" element={<AddRole/>}/>
+        <Route exact path="/edit-role/:roleId" key="edit-role" element={<AddRole/>}/>
         <Route
             exact
             path="/manageSalaries"

@@ -109,6 +109,14 @@ export const asyncForEach = async (array, callback) => {
     }
 }
 
+export  const repeatOptions =  [
+    { label: "Daily", value: "Daily" },
+    { label: "Weekly", value: "Weekly" },
+    { label: "Monthly", value: "Monthly" },
+    { label: "Yearly", value: "Yearly" },
+  ];
+ 
+
 /**
  * Get the URL parameters
  * source: https://css-tricks.com/snippets/javascript/get-url-variables/

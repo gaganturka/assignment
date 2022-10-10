@@ -52,7 +52,6 @@ const ManageEmployee = () => {
         search: search,
       })
       .then((res) => {
-        console.log("ALL EMPLOYEES = ", res);
         setEmployess(res.list);
         setPages(
           parseInt(res.count % sizePerPage) == 0
@@ -92,7 +91,7 @@ const ManageEmployee = () => {
               <div className="col-lg-3">
                 <div className="admin-short-nav-buttons">
                   <div className="table-btn-group">
-                    <Link to="/addEmployee">
+                    <Link to="/add-employee">
                       <button className="btn black-fill" type="button">
                         Add Employee
                       </button>
@@ -131,7 +130,6 @@ const ManageEmployee = () => {
                       </thead>
                       <tbody>
                         {employees.map((employee, i) => {
-                            {console.log('MANAGE EMPLOYEE = ', employee)}
                           return (
                             <tr key={i}>
                               <td>
@@ -152,7 +150,7 @@ const ManageEmployee = () => {
                                       alt=""
                                     />
                                   </button> */}
-                                  <Link to={`/editEmployee/${employee._id}`}>
+                                  <Link to={`/edit-employee/${employee._id}`}>
                                     <button className="btn" type="button">
                                       <img
                                         src="/assets/img/edit-pencil-icon.png"

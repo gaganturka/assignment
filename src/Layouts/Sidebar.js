@@ -198,8 +198,8 @@ const Sidebar = (props) => {
                   [
                     "/viewInvoices",
                     "/addInvoice",
-                    "/viewRequestedFunds",
-                    "/addRequestFund",
+                    "/view-requested-funds",
+                    "/add-request-fund",
                     "/statement",
                   ],
                   "show"
@@ -216,16 +216,16 @@ const Sidebar = (props) => {
                       Add new Invoice
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/viewRequestedFunds"])}`}>
+                  <li className={`${activeClass(["/view-requested-funds"])}`}>
                     <Link
-                      to="/viewRequestedFunds"
+                      to="/view-requested-funds"
                       className="link-dark rounded"
                     >
                       View Requested Funds
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addRequestFund"])}`}>
-                    <Link to="/addRequestFund" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-request-fund"])}`}>
+                    <Link to="/add-request-fund" className="link-dark rounded">
                       Add new Request fund
                     </Link>
                   </li>
@@ -251,7 +251,7 @@ const Sidebar = (props) => {
               </button>
               <div
                 className={`collapse ${activeClass(
-                  ["/events", "/addEvent", "/addLocation", "/manageLocation"],
+                  ["/events", "/add-event"],
                   "show"
                 )}`}
               >
@@ -261,21 +261,21 @@ const Sidebar = (props) => {
                       Events
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addEvent"])}`}>
-                    <Link to="/addEvent" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-event"])}`}>
+                    <Link to="/add-event" className="link-dark rounded">
                       Add Event
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/manageLocation"])}`}>
+                  {/* <li className={`${activeClass(["/manageLocation"])}`}>
                     <Link to="/manageLocation" className="link-dark rounded">
                       Manage Location
                     </Link>
-                  </li>
-                  <li className={`${activeClass(["/addLocation"])}`}>
+                  </li> */}
+                  {/* <li className={`${activeClass(["/addLocation"])}`}>
                     <Link to="/addLocation" className="link-dark rounded">
                       Add Location
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </li>
@@ -302,33 +302,33 @@ const Sidebar = (props) => {
               <div
                 className={`collapse ${activeClass(
                   [
-                    "/manageEmployee",
-                    "/addEmployee",
-                    "/manageRole",
-                    "/addRole",
+                    "/manage-employee",
+                    "/add-employee",
+                    "/manage-role",
+                    "/add-role",
                     "/manageSalaries",
                   ],
                   "show"
                 )}`}
               >
                 <ul className="btn-toggle-nav">
-                  <li className={`${activeClass(["/manageEmployee"])}`}>
-                    <Link to="/manageEmployee" className="link-dark rounded">
+                  <li className={`${activeClass(["/manage-employee"])}`}>
+                    <Link to="/manage-employee" className="link-dark rounded">
                       Manage Employee
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addEmployee"])}`}>
-                    <Link to="/addEmployee" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-employee"])}`}>
+                    <Link to="/add-employee" className="link-dark rounded">
                       Add Employee
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/manageRole"])}`}>
-                    <Link to="/manageRole" className="link-dark rounded">
+                  <li className={`${activeClass(["/manage-role"])}`}>
+                    <Link to="/manage-role" className="link-dark rounded">
                       Manage Role
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addRole"])}`}>
-                    <Link to="/addRole" className="link-dark rounded">
+                  <li className={`${activeClass(["/add-role"])}`}>
+                    <Link to="/add-role" className="link-dark rounded">
                       Add Role
                     </Link>
                   </li>
@@ -367,6 +367,8 @@ const Sidebar = (props) => {
                     "/contact-groups",
                     "/case-stages",
                     "/practice-areas",
+                    "/manage-location",
+                    "/manage-bank-account"
                   ],
                   "show"
                 )}`}
@@ -391,6 +393,16 @@ const Sidebar = (props) => {
                   <li className={`${activeClass(["/practice-areas"])}`}>
                     <Link to="/practice-areas" className="link-dark rounded">
                       Practice Areas
+                    </Link>
+                  </li>
+                  <li className={`${activeClass(["/manage-location"])}`}>
+                    <Link to="/manage-location" className="link-dark rounded">
+                      Manage Location
+                    </Link>
+                  </li>
+                  <li className={`${activeClass(["/manage-bank-account"])}`}>
+                    <Link to="/manage-bank-account" className="link-dark rounded">
+                      Bank Account
                     </Link>
                   </li>
                 </ul>

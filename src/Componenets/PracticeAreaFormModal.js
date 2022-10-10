@@ -20,8 +20,6 @@ const PracticeAreaFormModal = (props) => {
         name: props.formModel?.name,
     });
 
-    console.log('modelField === ', modelFields)
-
     const [errors, setErrors] = useState({});
 
     const schema = {
@@ -58,6 +56,7 @@ const PracticeAreaFormModal = (props) => {
             if (modelFields._id === undefined) {
                 request = practiceAreasActions.create(modelFields);
             } else {
+            
                 request = practiceAreasActions.update(modelFields._id, modelFields);
             }
             request.then((res) => {
@@ -77,6 +76,7 @@ const PracticeAreaFormModal = (props) => {
 
     const closeThisModal = (thingsChanged = false) => {
         closeModal("practiceAreaFormModal");
+        setModelFields({});
         props.onClose(thingsChanged);
     }
 

@@ -7,25 +7,22 @@ import {
   validateJOIFormField,
   validateJOIProperty,
 } from "../Utils/Helpers";
-
 import * as Joi from "joi-browser";
 import countryList from "react-select-country-list";
-import * as locationActions from "../Services/Actions/LocationActions";
-
-import * as contactGroupActions from "../Services/Actions/ContactGroupActions";
-
+import * as bankAccountActions from "../Services/Actions/BankAccountActions";
 import FieldError from "./FieldError";
 import { toast } from "react-toastify";
 import Creatable from "react-select/creatable";
 import * as commonActions from "../Services/Actions/CommonActions";
 
-export const LocationFormModal = (props) => {
+export const BankAccountFormModal = (props) => {
   //State VAriables
-  const [isEdit, setIsEdit] = useState(true);
   const [value, setValue] = useState("");
   const [modelFields, setModelFields] = useState({
-    address1: "",
-    address2: "",
+    accountHolder: "",
+    accountNumber: "",
+    bank: "",
+    address: "",
   });
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -37,28 +34,12 @@ export const LocationFormModal = (props) => {
   const [loading, setLoading] = useState(false);
   const [model, setModel] = useState(null);
 
-  useEffect(() => {
-    if (isEdit === true && props.formModel) {
-      setSelectedCountry({
-        label: props.formModel.country,
-        value: props.formModel.country,
-      });
-      setSelectedState({
-        label: props.formModel.state,
-        value: props.formModel.state,
-      });
-      setSelectedCity({
-        label: props.formModel.city,
-        value: props.formModel.city,
-      });
-      setIsEdit(false);
-    }
-  });
 
   const schema = {
-    name: Joi.string().min(3).required(),
-    address1: Joi.string().min(3).required(),
-    address2: Joi.string().min(3).required(),
+    accountHolder: Joi.string().alphanum().min(2).max(30).required(),
+    accountNumber: Joi.string().min(14).max(14).required(),
+    bank: Joi.string().required(),
+    address: Joi.string().required(),
     country: Joi.string().required(),
     state: Joi.string().required(),
     city: Joi.string().required(),
@@ -180,15 +161,14 @@ export const LocationFormModal = (props) => {
       let result = null;
       delete modelFields.countryCode;
       delete modelFields.stateCode;
-      delete modelFields._id;
       if (modelFields._id === undefined) {
-        result = locationActions.create(modelFields);
+        result = bankAccountActions.create(modelFields);
       } else {
-        result = locationActions.update(modelFields.id, modelFields);
+        result = bankAccountActions.update(modelFields._id, modelFields);
       }
       result
         .then((res) => {
-          toast("Location has been saved");
+          toast("Bank Account has been saved");
           hideLoading();
           clearModelFields();
           setSelectedCountry(null);
@@ -210,11 +190,10 @@ export const LocationFormModal = (props) => {
 
   const clearModelFields = () => {
     setModelFields({});
-    setErrors(null);
   };
 
   const closeThisModal = (thingsChanged = false) => {
-    closeModal("locationFormModal");
+    closeModal("bankAccountFormModal");
     setModelFields({});
     setErrors({});
     setSelectedCountry(null);
@@ -284,16 +263,16 @@ export const LocationFormModal = (props) => {
     <>
       <div
         className="modal fade"
-        id="locationFormModal"
+        id="bankAccountFormModal"
         tabIndex="-1"
-        aria-labelledby="locationFormModal"
+        aria-labelledby="bankAccountFormModal"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="locationFormModal">
-                Add Location
+              <h5 className="modal-title" id="bankAccountFormModal">
+                Add Bank Account
               </h5>
               <button
                 onClick={(e) => closeThisModal()}
@@ -306,19 +285,19 @@ export const LocationFormModal = (props) => {
             <div className="modal-body">
               <div className="formFields">
                 <div className="row">
-                  <div className="12 col-12">
+                  <div className="6 col-6">
                     <div className="formFieldWrapper">
-                      <label htmlFor="name">Name</label>
+                      <label htmlFor="name">Account Holder</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="name"
-                        name="name"
-                        value={modelFields.name || ""}
+                        id="accountHolder"
+                        name="accountHolder"
+                        value={modelFields.accountHolder || ""}
                         onChange={handleChange}
-                        placeholder="Name"
+                        placeholder="Account Holder"
                       />
-                      <FieldError error={errors.name} />
+                      <FieldError error={errors.accountHolder} />
                     </div>
                   </div>
                 </div>
@@ -326,17 +305,17 @@ export const LocationFormModal = (props) => {
                 <div className="row">
                   <div className="12 col-12">
                     <div className="formFieldWrapper">
-                      <label htmlFor="name">Address1</label>
+                      <label htmlFor="name">Account Number</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="address1"
-                        name="address1"
-                        value={modelFields.address1 || ""}
+                        id="accountNumber"
+                        name="accountNumber"
+                        value={modelFields.accountNumber || ""}
                         onChange={handleChange}
-                        placeholder="Address1"
+                        placeholder="Account Number"
                       />
-                      <FieldError error={errors.address1} />
+                      <FieldError error={errors.accountNumber} />
                     </div>
                   </div>
                 </div>
@@ -344,17 +323,35 @@ export const LocationFormModal = (props) => {
                 <div className="row">
                   <div className="12 col-12">
                     <div className="formFieldWrapper">
-                      <label htmlFor="name">Address2</label>
+                      <label htmlFor="name">Bank</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="address2"
-                        name="address2"
-                        value={modelFields.address2 || ""}
+                        id="bank"
+                        name="bank"
+                        value={modelFields.bank || ""}
                         onChange={handleChange}
-                        placeholder="Address2"
+                        placeholder="Bank"
                       />
-                      <FieldError error={errors.address2} />
+                      <FieldError error={errors.bank} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="12 col-12">
+                    <div className="formFieldWrapper">
+                      <label htmlFor="name">Address</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="address"
+                        name="address"
+                        value={modelFields.address || ""}
+                        onChange={handleChange}
+                        placeholder="Address"
+                      />
+                      <FieldError error={errors.address} />
                     </div>
                   </div>
                 </div>
@@ -423,7 +420,7 @@ export const LocationFormModal = (props) => {
                         onChange={handleChange}
                         placeholder="Zipcode"
                       />
-                      <FieldError error={errors.zipcode} />
+                      <FieldError error={errors.zipCode} />
                     </div>
                   </div>
                 </div>
@@ -437,6 +434,7 @@ export const LocationFormModal = (props) => {
                     Save
                   </button>
                 </div>
+                {/* form */}
               </div>
             </div>
           </div>

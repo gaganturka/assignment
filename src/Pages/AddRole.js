@@ -78,7 +78,6 @@ const AddRole = () => {
   };
 
   const handleSelectedOptions = (event) => {
-    console.log('EVENT = ', event)
     setSelectedOption(event);
   };
 
@@ -101,7 +100,7 @@ const AddRole = () => {
               .then((res) => {
                 toast("Role Added!");
                 setLoading(false);
-                history("/manageRole");
+                history("/manage-role");
               })
               .catch((err) => {
                 toast('Failed to load');
@@ -117,7 +116,7 @@ const AddRole = () => {
             .then(res => {
                 toast("Role Edited!");
                 setLoading(false);
-                history("/manageRole");
+                history("/manage-role");
             })
             .catch((err) => {
                 toast('Failed to load');

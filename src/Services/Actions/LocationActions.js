@@ -1,26 +1,19 @@
 import * as http from '../../Utils/Http';
 
-
-
-// const get = (params = {}) => {
-//     return http.get('/firm/employees', params)
-// }
-
-// const view = (id) => {
-//     return http.get('/firm/employees/' + id)
-// }
-
 export const get = (params = {}) => {
-    return http.get('/firm/location', params)
+    return http.get('/firm/locations', params)
 }
 
 export const create = (values) => {
-    return http.post('/firm/location', values);
+    return http.post('/firm/locations', values);
 }
 
-// const update = (id, values) => {
-//     return http.patch('/firm/employees/' + id, values)
-// }
+export const view = (id) => {
+    return http.get('/firm/locations/' + id)
+}
 
-// export default {get, create};
+export const update = (id, values) => {
+    return http.patch('/firm/locations/' + id, values)
+}
+
 
