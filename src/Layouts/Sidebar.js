@@ -177,8 +177,8 @@ const Sidebar = (props) => {
             </li>
             <li
               className={`${activeClass([
-                "/viewInvoices",
-                "/addInvoice",
+                "/invoices",
+                "/invoices/create",
                 "/viewRequestedFunds",
                 "/addRequestFund",
                 "/statement",
@@ -187,7 +187,7 @@ const Sidebar = (props) => {
               <button
                 className="btn btn-toggle align-items-center rounded"
                 data-bs-toggle="collapse"
-                data-bs-target="#case-collapse"
+                data-bs-target="#case-collapse" 
                 aria-expanded="false"
                 onClick={(event) => {
                   toggleActiveClass(event);
@@ -198,23 +198,23 @@ const Sidebar = (props) => {
               <div
                 className={`collapse ${activeClass(
                   [
-                    "/viewInvoices",
-                    "/addInvoice",
+                    "/invoices",
+                    "/invoices/create",
                     "/view-requested-funds",
                     "/add-request-fund",
                     "/statement",
                   ],
                   "show"
-                )}`}
+                )}`} 
               >
                 <ul className="btn-toggle-nav">
-                  <li className={`${activeClass(["/viewInvoices"])}`}>
-                    <Link to="/viewInvoices" className="link-dark rounded">
+                  <li className={`${activeClass(["/invoices"])}`}>
+                    <Link to="/invoices" className="link-dark rounded">
                       View Invoices
                     </Link>
                   </li>
-                  <li className={`${activeClass(["/addInvoice"])}`}>
-                    <Link to="/addInvoice" className="link-dark rounded">
+                  <li className={`${activeClass(["/invoices/create"])}`}>
+                    <Link to="/invoices/create" className="link-dark rounded">
                       Add new Invoice
                     </Link>
                   </li>
